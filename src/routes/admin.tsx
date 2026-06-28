@@ -118,6 +118,11 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
           <Button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: 8 }}>
             {loading ? "Entrando…" : "Entrar"}
           </Button>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
+            <Button asChild variant="outline">
+              <a href="/">Voltar ao site</a>
+            </Button>
+          </div>
         </form>
       </Card>
     </div>
@@ -144,27 +149,23 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         <Tabs defaultValue="reservas">
           <TabsList style={{ flexWrap: "wrap", height: "auto" }}>
             <TabsTrigger value="reservas">📋 Reservas</TabsTrigger>
-            <TabsTrigger value="proxima">⭐ Próxima Oficina</TabsTrigger>
             <TabsTrigger value="site">Site / SEO</TabsTrigger>
             <TabsTrigger value="hero">Hero</TabsTrigger>
             <TabsTrigger value="sobre">Sobre</TabsTrigger>
             <TabsTrigger value="atividades">Atividades</TabsTrigger>
+            <TabsTrigger value="eventos">Eventos</TabsTrigger>
             <TabsTrigger value="como">Como Funciona</TabsTrigger>
             <TabsTrigger value="galeria">Galeria</TabsTrigger>
             <TabsTrigger value="depoimentos">Depoimentos</TabsTrigger>
             <TabsTrigger value="contato">Contato</TabsTrigger>
             <TabsTrigger value="faq">FAQ</TabsTrigger>
             <TabsTrigger value="cta_final">CTA Final</TabsTrigger>
-            <TabsTrigger value="evento">Banners</TabsTrigger>
+            <TabsTrigger value="evento">Próximo evento</TabsTrigger>
             <TabsTrigger value="apoiadores">Apoiadores</TabsTrigger>
             <TabsTrigger value="footer">Rodapé</TabsTrigger>
           </TabsList>
 
           <TabsContent value="reservas"><ReservationsEditor /></TabsContent>
-
-          <TabsContent value="proxima">
-            <NextWorkshopEditor />
-          </TabsContent>
 
           <TabsContent value="site"><ContentEditor sectionKey="site" fields={[
             { k: "name", label: "Nome do site" },
@@ -187,6 +188,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             { k: "img_main", label: "Imagem principal", image: true },
             { k: "img_a", label: "Imagem secundária A", image: true },
             { k: "img_b", label: "Imagem secundária B", image: true },
+            { k: "img_c", label: "Imagem 4 do Hero", image: true },
             { k: "stats", label: "Estatísticas", json: true },
           ]} /></TabsContent>
 
@@ -201,6 +203,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             { k: "img_main", label: "Imagem principal", image: true },
             { k: "img_a", label: "Imagem A", image: true },
             { k: "img_b", label: "Imagem B", image: true },
+            { k: "img_c", label: "Imagem 4 do Sobre", image: true },
             { k: "bullets", label: "Lista de benefícios", json: true },
           ]} /></TabsContent>
 
@@ -216,6 +219,8 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
               <ActivitiesEditor />
             </div>
           </TabsContent>
+
+          <TabsContent value="eventos"><EventsEditor /></TabsContent>
 
           <TabsContent value="como"><ContentEditor sectionKey="como" fields={[
             { k: "tag", label: "Tag" },
@@ -531,6 +536,181 @@ function ActivitiesEditor() {
   );
 }
 
+function EventsEditor() {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  async function load() {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .order("date", { ascending: true })
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+
+    setItems(data ?? []);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  async function add() {
+    const sort = (items[items.length - 1]?.sort_order ?? 0) + 1;
+    const { error } = await supabase.from("events").insert({
+      name: "Nova oficina",
+      description: "Descrição do evento",
+      date: "",
+      time: "",
+      location: "",
+      price: 0,
+      spots_available: 0,
+      image_url: "",
+      active: true,
+      sort_order: sort,
+    });
+
+    if (error) return toast.error(error.message);
+    load();
+  }
+
+  async function save(item: any) {
+    const { error } = await supabase.from("events").update({
+      name: item.name,
+      description: item.description,
+      date: item.date,
+      time: item.time,
+      location: item.location,
+      price: item.price,
+      spots_available: item.spots_available,
+      image_url: item.image_url,
+      active: item.active,
+      sort_order: item.sort_order,
+    }).eq("id", item.id);
+
+    if (error) return toast.error(error.message);
+    toast.success("Evento salvo");
+    load();
+  }
+
+  async function remove(id: string) {
+    if (!confirm("Excluir este evento?")) return;
+    const { error } = await supabase.from("events").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Evento excluído");
+    load();
+  }
+
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    const a = items[i];
+    const b = items[j];
+    supabase.from("events").update({ sort_order: b.sort_order }).eq("id", a.id).then(() => {
+      supabase.from("events").update({ sort_order: a.sort_order }).eq("id", b.id).then(load);
+    });
+  }
+
+  return (
+    <Card style={{ padding: 24, borderRadius: 20 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
+        <div>
+          <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 22 }}>Eventos</h2>
+          <p style={{ color: "var(--texto-suave)", marginTop: 4, fontSize: 13 }}>
+            Liste, edite e ative/desative os eventos que aparecem no site.
+          </p>
+        </div>
+        <Button onClick={add}><Plus size={16} /> Novo evento</Button>
+      </div>
+
+      {loading ? (
+        <div style={{ padding: 20 }}>Carregando…</div>
+      ) : items.length === 0 ? (
+        <div style={{ padding: 20, color: "var(--texto-suave)" }}>
+          Nenhum evento cadastrado ainda.
+        </div>
+      ) : (
+        <div style={{ display: "grid", gap: 16 }}>
+          {items.map((it, i) => (
+            <div key={it.id} style={{ border: "1px solid #eee", borderRadius: 16, padding: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                <div>
+                  <Label>Nome</Label>
+                  <Input value={it.name ?? ""} onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, name: e.target.value } : x))} />
+                </div>
+                <div>
+                  <Label>Data</Label>
+                  <Input type="date" value={it.date ?? ""} onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, date: e.target.value } : x))} />
+                </div>
+                <div>
+                  <Label>Horário</Label>
+                  <Input type="text" value={it.time ?? ""} placeholder="10:00" onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, time: e.target.value } : x))} />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 }}>
+                <div>
+                  <Label>Local</Label>
+                  <Input value={it.location ?? ""} onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, location: e.target.value } : x))} />
+                </div>
+                <div>
+                  <Label>Preço</Label>
+                  <Input type="number" min="0" step="0.01" value={it.price ?? ""} onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, price: Number(e.target.value) } : x))} />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 }}>
+                <div>
+                  <Label>Vagas</Label>
+                  <Input type="number" min="0" value={it.spots_available ?? ""} onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, spots_available: Number(e.target.value) } : x))} />
+                </div>
+                <div>
+                  <Label>Status</Label>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+                    <input
+                      id={`event-active-${it.id}`}
+                      type="checkbox"
+                      checked={!!it.active}
+                      onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, active: e.target.checked } : x))}
+                    />
+                    <label htmlFor={`event-active-${it.id}`} style={{ cursor: "pointer" }}>
+                      {it.active ? "Ativo" : "Inativo"}
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 12 }}>
+                <Label>Imagem</Label>
+                <ImagePicker value={it.image_url ?? ""} onChange={(v) => setItems(items.map(x => x.id === it.id ? { ...x, image_url: v } : x))} />
+              </div>
+
+              <div style={{ marginTop: 12 }}>
+                <Label>Descrição</Label>
+                <Textarea rows={3} value={it.description ?? ""} onChange={(e) => setItems(items.map(x => x.id === it.id ? { ...x, description: e.target.value } : x))} />
+              </div>
+
+              <div style={{ display: "flex", gap: 8, marginTop: 14, justifyContent: "flex-end" }}>
+                <Button variant="destructive" onClick={() => remove(it.id)}><Trash2 size={14} /></Button>
+                <Button variant="outline" onClick={() => move(i, -1)}><ArrowUp size={14} /></Button>
+                <Button variant="outline" onClick={() => move(i, 1)}><ArrowDown size={14} /></Button>
+                <Button onClick={() => save(it)}>Salvar</Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
+
 /* ---------------- GALLERY ---------------- */
 
 function GalleryEditor() {
@@ -785,7 +965,7 @@ function BannersEditor() {
     <Card style={{ padding: 24, borderRadius: 20 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16, alignItems: "center" }}>
         <div>
-          <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 22 }}>Banners do evento</h2>
+          <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 22 }}>Próximo evento</h2>
           <p style={{ color: "var(--texto-suave)", fontSize: 13, marginTop: 4 }}>
             Adicione um ou mais banners. Eles aparecem na seção "Próximo evento" do site.
           </p>
@@ -835,58 +1015,6 @@ function BannersEditor() {
 
 /* ---------------- NEXT WORKSHOP ---------------- */
 
-function NextWorkshopEditor() {
-  const [v, setV] = useState<any | null>(null);
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    supabase.from("site_content").select("value").eq("key", "next_workshop").maybeSingle()
-      .then(({ data }) => setV((data?.value as any) ?? {
-        name: "", date: "", time: "", location: "", address: "", price: 0, vacancies: 0, banner: "", active: true,
-      }));
-  }, []);
-
-  async function save() {
-    setSaving(true);
-    const { error } = await supabase.from("site_content").upsert({ key: "next_workshop", value: v });
-    setSaving(false);
-    if (error) toast.error(error.message); else toast.success("Próxima oficina salva!");
-  }
-
-  if (!v) return <div style={{ padding: 20 }}>Carregando…</div>;
-  const upd = (patch: any) => setV({ ...v, ...patch });
-
-  return (
-    <Card style={{ padding: 28, borderRadius: 20 }}>
-      <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 22, marginBottom: 4 }}>Próxima Oficina</h2>
-      <p style={{ color: "var(--texto-suave)", fontSize: 13, marginBottom: 20 }}>
-        Esses dados são usados no formulário de reserva e na mensagem de confirmação por WhatsApp.
-      </p>
-      <div style={{ display: "grid", gap: 14 }}>
-        <div><Label>Nome da oficina</Label><Input value={v.name ?? ""} onChange={(e) => upd({ name: e.target.value })} /></div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-          <div><Label>Data</Label><Input value={v.date ?? ""} onChange={(e) => upd({ date: e.target.value })} placeholder="ex. 15/06/2026" /></div>
-          <div><Label>Horário</Label><Input value={v.time ?? ""} onChange={(e) => upd({ time: e.target.value })} placeholder="ex. 9h às 11h" /></div>
-        </div>
-        <div><Label>Local</Label><Input value={v.location ?? ""} onChange={(e) => upd({ location: e.target.value })} placeholder="ex. Espaço Bincá" /></div>
-        <div><Label>Endereço</Label><Input value={v.address ?? ""} onChange={(e) => upd({ address: e.target.value })} placeholder="Rua, número, bairro, cidade" /></div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-          <div><Label>Valor por criança (R$)</Label><Input type="number" min={0} step="0.01" value={v.price ?? 0} onChange={(e) => upd({ price: Number(e.target.value) })} /></div>
-          <div><Label>Quantidade de vagas</Label><Input type="number" min={0} value={v.vacancies ?? 0} onChange={(e) => upd({ vacancies: Number(e.target.value) })} /></div>
-        </div>
-        <div><Label>Banner / imagem</Label><ImagePicker value={v.banner ?? ""} onChange={(val) => upd({ banner: val })} /></div>
-        <label style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
-          <input type="checkbox" checked={!!v.active} onChange={(e) => upd({ active: e.target.checked })} />
-          <span style={{ fontWeight: 700 }}>Oficina ativa (aceitando reservas)</span>
-        </label>
-      </div>
-      <Button className="btn-primary" style={{ marginTop: 24 }} onClick={save} disabled={saving}>
-        {saving ? "Salvando…" : "Salvar próxima oficina"}
-      </Button>
-    </Card>
-  );
-}
-
 /* ---------------- RESERVATIONS ---------------- */
 
 const STATUS_LABELS: Record<string, string> = {
@@ -912,7 +1040,6 @@ function ReservationsEditor() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<any | null>(null);
-  const [workshop, setWorkshop] = useState<any>({});
   const [contato, setContato] = useState<any>({});
 
   async function load() {
@@ -923,11 +1050,8 @@ function ReservationsEditor() {
   }
   useEffect(() => {
     load();
-    supabase.from("site_content").select("key,value").in("key", ["next_workshop", "contato"]).then(({ data }) => {
-      for (const r of data ?? []) {
-        if (r.key === "next_workshop") setWorkshop(r.value);
-        if (r.key === "contato") setContato(r.value);
-      }
+    supabase.from("site_content").select("key,value").eq("key", "contato").maybeSingle().then(({ data }) => {
+      setContato((data?.value as any) ?? {});
     });
   }, []);
 
@@ -957,11 +1081,11 @@ function ReservationsEditor() {
       "",
       `Sua reserva na Bincá foi *confirmada*!`,
       childrenNames ? `Crianças: ${childrenNames}` : "",
-      r.workshop_name ? `Oficina: ${r.workshop_name}` : (workshop.name ? `Oficina: ${workshop.name}` : ""),
-      workshop.date ? `Data: ${workshop.date}` : "",
-      workshop.time ? `Horário: ${workshop.time}` : "",
-      workshop.location ? `Local: ${workshop.location}` : "",
-      workshop.address ? `Endereço: ${workshop.address}` : "",
+      r.workshop_name ? `Oficina: ${r.workshop_name}` : "",
+      "",
+      "",
+      "",
+      "",
       r.amount ? `Valor: R$ ${Number(r.amount).toFixed(2).replace(".", ",")} — pagamento aprovado ✅` : "",
       "",
       "Vaga garantida 💚 Te esperamos!",

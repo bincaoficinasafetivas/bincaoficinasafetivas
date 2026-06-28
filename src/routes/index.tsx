@@ -1,14 +1,37 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Suspense, useState } from "react";
-import { fetchSiteData } from "@/lib/content.functions";
+import { Suspense, useEffect, useState } from "react";
+import { fetchSiteData, getEvents } from "@/lib/content.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Instagram, HelpCircle, Mail, ChevronDown, MessageCircle, Heart, Leaf, Sparkles, Sprout, Users, Star, ArrowRight } from "lucide-react";
 
+function formatEventDate(value?: string | null) {
+  if (!value) return "";
+  const date = new Date(value.includes("T") ? value : `${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+function formatEventTime(value?: string | null) {
+  return value ? value : "Horário a combinar";
+}
+
+function formatEventPrice(value: number | string | null | undefined) {
+  if (value === null || value === undefined || value === "") return "Grátis";
+  const amount = Number(value);
+  if (Number.isNaN(amount) || amount === 0) return "Grátis";
+  return `R$ ${amount.toFixed(2).replace(".", ",")}`;
+}
+
 const siteQuery = queryOptions({
   queryKey: ["site-data"],
   queryFn: () => fetchSiteData(),
+});
+
+const eventsQuery = queryOptions({
+  queryKey: ["events"],
+  queryFn: () => getEvents(),
 });
 
 export const Route = createFileRoute("/")({
@@ -47,6 +70,15 @@ function HomePage() {
 
 function HomeInner() {
   const { data } = useSuspenseQuery(siteQuery);
+  const { data: events = [] } = useSuspenseQuery(eventsQuery);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (events.length === 1) {
+      setSelectedEventId(events[0].id);
+    }
+  }, [events]);
+
   const { content, activities, testimonials, gallery } = data;
   const site = content.site ?? {};
   const hero = content.hero ?? {};
@@ -61,7 +93,6 @@ function HomeInner() {
   const apoiadoresH = content.apoiadores ?? {};
   const apoiadores: any[] = Array.isArray(content.sponsors) ? content.sponsors : [];
   const footer = content.footer ?? {};
-  const nextWS = content.next_workshop ?? {};
   const faq: { q: string; a: string }[] = Array.isArray(content.faq?.items)
     ? content.faq.items
     : Array.isArray(content.faq) ? content.faq : [];
@@ -70,6 +101,18 @@ function HomeInner() {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalImg, setModalImg] = useState<string | null>(null);
+
+  function scrollToReservationForm() {
+    const formElement = document.getElementById("reserva-form");
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function selectEvent(eventId: string) {
+    setSelectedEventId(eventId);
+    scrollToReservationForm();
+  }
 
   const heroCopy = {
     tag: "APRENDER BRINCANDO, CONECTAR PARA SEMPRE",
@@ -93,16 +136,20 @@ function HomeInner() {
 
   const heroImages = [
     {
-      src: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1000&q=80",
+      src: hero.img_main || "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1000&q=80",
       alt: "Criança explorando materiais naturais",
     },
     {
-      src: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
+      src: hero.img_a || "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
       alt: "Família brincando em ambiente acolhedor",
     },
     {
-      src: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
+      src: hero.img_b || "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
       alt: "Detalhe de folhas e materiais naturais",
+    },
+    {
+      src: hero.img_c || "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80",
+      alt: "Ambiente acolhedor com materiais sensoriais",
     },
   ];
 
@@ -112,19 +159,19 @@ function HomeInner() {
 
   const essenceImages = [
     {
-      src: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1000&q=80",
+      src: sobre.img_main || "https://images.unsplash.com/photo-1503454537195-1dcabb73f9?auto=format&fit=crop&w=1000&q=80",
       alt: "Criança explorando a natureza",
     },
     {
-      src: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1000&q=80",
+      src: sobre.img_a || "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1000&q=80",
       alt: "Mãos em contato com folhas e pedras",
     },
     {
-      src: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1000&q=80",
+      src: sobre.img_b || "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1000&q=80",
       alt: "Pai e mãe interagindo com a criança",
     },
     {
-      src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1000&q=80",
+      src: sobre.img_c || "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1000&q=80",
       alt: "Detalhe de materiais naturais",
     },
   ];
@@ -136,29 +183,17 @@ function HomeInner() {
     "Memórias afetivas que permanecem",
   ];
 
-  const activityCards = [
-    {
-      title: "Exploração da Natureza",
-      description: "Atividades sensoriais para descobrir texturas, cores e movimentos da natureza com calma, curiosidade e presença.",
-      ageRange: "2–4 anos",
-      image: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
-      icon: Sprout,
-    },
-    {
-      title: "Brincadeiras Sensoriais",
-      description: "Vivências pensadas para estimular os sentidos, a linguagem e a autonomia em cada etapa da infância.",
-      ageRange: "5–7 anos",
-      image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=900&q=80",
-      icon: Sparkles,
-    },
-    {
-      title: "Oficinas em Família",
-      description: "Momentos acolhedores em que pais e filhos se conectam por meio de brincadeiras intencionais e naturais.",
-      ageRange: "8–9 anos",
-      image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
-      icon: Users,
-    },
-  ];
+  const activityCards = activities.map((item: any, index: number) => {
+    const icons = [Sprout, Sparkles, Users];
+    const Icon = icons[index % icons.length];
+    return {
+      title: item.title || item.name || "Atividade",
+      description: item.description || item.subtitle || "",
+      ageRange: item.age_range || item.ageRange || "",
+      image: item.image_url || item.image || "https://placehold.co/600x400/f2e2d0/5c3d2e?text=Bincá",
+      icon: Icon,
+    };
+  });
 
   const howSteps = [
     {
@@ -175,24 +210,10 @@ function HomeInner() {
     },
   ];
 
-  const galleryItems = [
-    {
-      src: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1200&q=80",
-      alt: "Criança explorando com lupa e cesta",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
-      alt: "Mãos mexendo em materiais naturais",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1200&q=80",
-      alt: "Família interagindo em oficina",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=80",
-      alt: "Detalhe de mãozinhas com folhas e flores",
-    },
-  ];
+  const galleryItems = gallery.map((item: any) => ({
+    src: item.image_url || item.image || "https://placehold.co/600x400/f2e2d0/5c3d2e?text=Bincá",
+    alt: item.caption || item.title || item.name || "Galeria Bincá",
+  }));
 
   const testimonialCards = [
     {
@@ -240,6 +261,8 @@ function HomeInner() {
   const waLink = (msg?: string) =>
     `https://wa.me/${waNumber}?text=${encodeURIComponent(msg ?? contato.wa_template ?? "Olá!")}`;
 
+  const imageFallback = "https://placehold.co/600x400/f2e2d0/5c3d2e?text=Bincá";
+
   return (
     <div className="binca">
       {/* HEADER */}
@@ -271,30 +294,80 @@ function HomeInner() {
       </header>
 
       <section className="reserva-section scroll-mt-20" id="reserva">
-        <div className="reserva-grid">
-          <div className="reserva-card reserva-evento">
-            <div className="section-tag">{nextWS.tag ?? "PRÓXIMA OFICINA"}</div>
-            <h2>{nextWS.title ?? "Vem aí uma nova oficina afetiva para sua família"}</h2>
-            <p className="section-lead">
-              {nextWS.description ?? "Inscrições abertas para a próxima vivência sensorial."}
-            </p>
-            <div className="reserva-banner">
-              {nextWS.image_url ? (
-                <img src={nextWS.image_url} alt={nextWS.title ?? "Próxima Oficina"} loading="lazy" />
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div className="flex-1">
+            <div className="reserva-card reserva-evento">
+              <div className="section-tag">PRÓXIMOS EVENTOS</div>
+              <h2>Encontre sua próxima oficina sensorial</h2>
+              {events.length === 0 ? (
+                <p className="section-lead">Em breve, novos eventos serão anunciados ✨</p>
               ) : (
-                <div className="reserva-banner-fallback">
-                  <span>Próxima Oficina</span>
-                </div>
+                <>
+                  <div className="rounded-[28px] border border-[#E7D8CC] bg-white overflow-hidden shadow-sm">
+                    <div className="h-64 overflow-hidden">
+                      <img
+                        src={events[0].image_url || imageFallback}
+                        alt={events[0].name || "Evento"}
+                        className="h-full w-full object-cover"
+                        onError={(e) => { e.currentTarget.src = imageFallback; }}
+                      />
+                    </div>
+                    <div className="p-6 space-y-4">
+                      <div className="section-tag">PRÓXIMA OFICINA</div>
+                      <div>
+                        <h3 className="text-2xl font-bold leading-tight">{events[0].name}</h3>
+                        <p className="text-sm text-[#6D5A4A]">{formatEventDate(events[0].date)} • {formatEventTime(events[0].time)}</p>
+                      </div>
+                      <div className="space-y-2 text-sm text-[#4A382D]">
+                        <p><strong>Local:</strong> {events[0].location || "Local a confirmar"}</p>
+                        <p><strong>Valor:</strong> {formatEventPrice(events[0].price)}</p>
+                        <p><strong>Vagas:</strong> {typeof events[0].spots_available === "number" ? `${events[0].spots_available} vaga${events[0].spots_available === 1 ? "" : "s"} restantes` : "Vagas disponíveis"}</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={() => selectEvent(events[0].id)}
+                      >
+                        Quero participar
+                      </button>
+                    </div>
+                  </div>
+                  {events.length > 1 && (
+                    <div className="mt-6 space-y-4">
+                      {events.slice(1).map((event) => (
+                        <div key={event.id} className="rounded-[24px] border border-[#E7D8CC] bg-white p-5 shadow-sm">
+                          <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                            <img
+                              src={event.image_url || imageFallback}
+                              alt={event.name || "Evento"}
+                              className="h-28 w-full rounded-3xl object-cover sm:w-40"
+                              onError={(e) => { e.currentTarget.src = imageFallback; }}
+                            />
+                            <div className="flex-1">
+                              <div className="section-tag">PRÓXIMA OFICINA</div>
+                              <h4 className="text-lg font-bold">{event.name}</h4>
+                              <p className="text-sm text-[#6D5A4A]">{formatEventDate(event.date)} • {formatEventTime(event.time)}</p>
+                              <p className="text-sm">{event.location || "Local a confirmar"}</p>
+                              <p className="text-sm"><strong>{formatEventPrice(event.price)}</strong></p>
+                              <p className="text-sm text-[#4A382D]">{typeof event.spots_available === "number" ? `${event.spots_available} vaga${event.spots_available === 1 ? "" : "s"} restantes` : "Vagas disponíveis"}</p>
+                              <button
+                                type="button"
+                                className="mt-3 btn-primary"
+                                onClick={() => selectEvent(event.id)}
+                              >
+                                Quero participar
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </div>
-            {(nextWS.cta_text || nextWS.cta || nextWS.cta_label) && (
-              <a href={nextWS.cta_link ?? "#reserva"} className="btn-primary">
-                {nextWS.cta_text ?? nextWS.cta ?? nextWS.cta_label ?? "Quero participar"}
-              </a>
-            )}
           </div>
-
-          <div className="reserva-card reserva-form-card">
+          <div className="flex-1 reserva-card reserva-form-card">
             <div className="reserva-copy">
               <div className="section-tag">RESERVE SUA VAGA</div>
               <h2>
@@ -304,7 +377,11 @@ function HomeInner() {
                 Preencha o formulário abaixo e receba as instruções de pagamento para confirmar a sua reserva.
               </p>
             </div>
-            <ReservationForm workshop={nextWS} />
+            <ReservationForm
+              events={events}
+              selectedEventId={selectedEventId}
+              onSelectEventId={setSelectedEventId}
+            />
           </div>
         </div>
       </section>
@@ -339,7 +416,12 @@ function HomeInner() {
           </div>
           {heroVisualImages.map((item, index) => (
             <div key={`${item.alt}-${index}`} className={`hero-photo-card hero-photo-card--${index + 1}`}>
-              <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
+              <img
+                src={item.src}
+                alt={item.alt}
+                loading={index === 0 ? "eager" : "lazy"}
+                onError={(e) => { e.currentTarget.src = imageFallback; }}
+              />
             </div>
           ))}
         </div>
@@ -361,7 +443,12 @@ function HomeInner() {
           </div>
           {essenceImages.map((item, index) => (
             <div key={`${item.alt}-${index}`} className={`essence-photo essence-photo-${index + 1}`}>
-              <img src={item.src} alt={item.alt} loading="lazy" />
+              <img
+                src={item.src}
+                alt={item.alt}
+                loading="lazy"
+                onError={(e) => { e.currentTarget.src = imageFallback; }}
+              />
             </div>
           ))}
         </div>
@@ -403,7 +490,12 @@ function HomeInner() {
             return (
               <article key={index} className="binca-card">
                 <div className="card-img">
-                  <img src={item.image} alt={item.title} loading="lazy" />
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    onError={(e) => { e.currentTarget.src = imageFallback; }}
+                  />
                 </div>
                 <div className="card-body">
                   <div className="card-emoji">
@@ -454,7 +546,12 @@ function HomeInner() {
         <div className="galeria-grid">
           {galleryItems.map((item, index) => (
             <div key={index} className="gal-item">
-              <img src={item.src} alt={item.alt} loading="lazy" />
+              <img
+                src={item.src}
+                alt={item.alt}
+                loading="lazy"
+                onError={(e) => { e.currentTarget.src = imageFallback; }}
+              />
             </div>
           ))}
         </div>
@@ -637,18 +734,7 @@ function HomeInner() {
           {apoiadoresH.title_b ?? ""}
         </h2>
         {apoiadoresH.subtitle && <p>{apoiadoresH.subtitle}</p>}
-        <div
-          style={{
-            marginTop: 40,
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 28,
-            justifyContent: "center",
-            alignItems: "center",
-            maxWidth: 1100,
-            width: "100%",
-          }}
-        >
+        <div className="sponsors-grid">
           {apoiadores.length === 0 && (
             <div style={{ color: "rgba(255,255,255,.65)" }}>
               Em breve, nossos parceiros e apoiadores.
@@ -764,8 +850,9 @@ function HomeInner() {
   );
 }
 
-function ReservationForm({ workshop }: { workshop: any }) {
-  const price = Number(workshop?.price ?? 0);
+function ReservationForm({ events, selectedEventId, onSelectEventId }: { events: any[]; selectedEventId: string | null; onSelectEventId: (id: string | null) => void }) {
+  const selectedEvent = events.find((event) => event.id === selectedEventId);
+  const price = Number(selectedEvent?.price ?? 0);
   const [responsavel, setResponsavel] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
@@ -782,6 +869,7 @@ function ReservationForm({ workshop }: { workshop: any }) {
     responsavel.trim() &&
     whatsapp.trim() &&
     email.trim() &&
+    selectedEventId &&
     notes.trim() &&
     confirmReserva &&
     children.length > 0 &&
@@ -818,6 +906,17 @@ function ReservationForm({ workshop }: { workshop: any }) {
     const validChildren = children.filter((c) => c.name.trim());
     setSubmitting(true);
     try {
+      if (!selectedEvent) {
+        toast.error("Selecione um evento antes de concluir a reserva.");
+        return;
+      }
+
+      const spotsToUse = validChildren.length || 1;
+      if (typeof selectedEvent.spots_available === "number" && selectedEvent.spots_available < spotsToUse) {
+        toast.error("Não há vagas suficientes para este evento.");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("reservations")
         .insert({
@@ -826,9 +925,12 @@ function ReservationForm({ workshop }: { workshop: any }) {
           email: email.trim().slice(0, 120) || null,
           children: validChildren.map((c) => ({ name: c.name.trim().slice(0, 80), age: c.age.trim().slice(0, 20) })),
           children_count: validChildren.length,
-          workshop_name: workshop?.name ?? null,
-          workshop_date: workshop?.date ?? null,
+          workshop_id: selectedEvent.id,
+          workshop_name: selectedEvent.name ?? null,
+          workshop_date: selectedEvent.date ?? null,
           amount: total || null,
+          consent_reservation: confirmReserva,
+          consent_image: imageConsent,
           notes: [
             notes.trim().slice(0, 1000),
             imageConsent ? "[Autoriza uso de imagem]" : "[NÃO autoriza uso de imagem]",
@@ -839,6 +941,19 @@ function ReservationForm({ workshop }: { workshop: any }) {
         .select("id")
         .single();
       if (error) throw error;
+
+      if (selectedEvent.id) {
+        const { error: eventError, data: updatedEvent } = await supabase
+          .from("events")
+          .update({ spots_available: (selectedEvent.spots_available ?? 0) - spotsToUse })
+          .eq("id", selectedEvent.id)
+          .gt("spots_available", spotsToUse - 1);
+
+        if (eventError || !updatedEvent || updatedEvent.length === 0) {
+          toast.error("Reserva registrada, mas não foi possível atualizar as vagas do evento.");
+        }
+      }
+
       setDone({ id: data!.id, total });
       toast.success("Reserva registrada!");
     } catch (err: any) {
@@ -864,7 +979,7 @@ function ReservationForm({ workshop }: { workshop: any }) {
   }
 
   return (
-    <form className="form-box" onSubmit={submit}>
+    <form id="reserva-form" className="form-box" onSubmit={submit}>
       <div className="form-title">Reserve sua vaga</div>
       <div className="form-sub">
         Preencha os campos abaixo. A vaga é confirmada após o pagamento ser aprovado.
@@ -882,6 +997,22 @@ function ReservationForm({ workshop }: { workshop: any }) {
           <label>E-mail *</label>
           <input type="email" maxLength={120} value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
+      </div>
+
+      <div className="form-group">
+        <label>Qual oficina você quer reservar? *</label>
+        <select
+          value={selectedEventId ?? ""}
+          onChange={(e) => onSelectEventId(e.target.value || null)}
+          required
+        >
+          <option value="">Selecione um evento</option>
+          {events.map((event) => (
+            <option key={event.id} value={event.id}>
+              {`${event.name} — ${formatEventDate(event.date)} — ${formatEventPrice(event.price)}`}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div style={{ marginTop: 4, marginBottom: 14, fontWeight: 700, color: "var(--texto)" }}>

@@ -274,6 +274,34 @@ const fetchSiteData = createServerFn({
     };
   }
 });
+const getEvents_createServerFn_handler = createServerRpc({
+  id: "983784792a07c78bf803d9be8fd2898677821847d5acea81d91684e3d93248bc",
+  name: "getEvents",
+  filename: "src/lib/content.functions.ts"
+}, (opts) => getEvents.__executeServer(opts));
+const getEvents = createServerFn({
+  method: "GET"
+}).handler(getEvents_createServerFn_handler, async () => {
+  try {
+    const {
+      data,
+      error
+    } = await supabaseAdmin.from("events").select("*").eq("active", true).order("date", {
+      ascending: true
+    }).order("sort_order", {
+      ascending: true
+    });
+    if (error) {
+      console.warn("[getEvents] erro ao buscar eventos", error);
+      return [];
+    }
+    return data ?? [];
+  } catch (error) {
+    console.warn("[getEvents] Supabase indisponível ou tabela não existe", error);
+    return [];
+  }
+});
 export {
-  fetchSiteData_createServerFn_handler
+  fetchSiteData_createServerFn_handler,
+  getEvents_createServerFn_handler
 };

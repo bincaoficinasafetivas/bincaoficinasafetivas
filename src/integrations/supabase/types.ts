@@ -104,6 +104,54 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          active: boolean
+          created_at: string
+          date: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          name: string
+          price: number
+          sort_order: number
+          spots_available: number
+          time: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          name: string
+          price?: number
+          sort_order?: number
+          spots_available?: number
+          time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          name?: string
+          price?: number
+          sort_order?: number
+          spots_available?: number
+          time?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       reservations: {
         Row: {
           amount: number | null

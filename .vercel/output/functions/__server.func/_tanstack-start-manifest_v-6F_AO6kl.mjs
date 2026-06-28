@@ -1,4 +1,0 @@
-const tsrStartManifest = () => ({ routes: { __root__: { filePath: "D:/04. VENTURA PRODUÇÕES/04. PROGRAMAÇÃO SITE/01. BINCÁ/BINCA OFICIAL v4/BINCA OFICIAL/src/routes/__root.tsx", children: ["/", "/admin", "/sitemap.xml"], preloads: ["/assets/index-Dfs7gr8D.js"], scripts: [{ attrs: { type: "module", async: true, src: "/assets/index-Dfs7gr8D.js" } }] }, "/": { filePath: "D:/04. VENTURA PRODUÇÕES/04. PROGRAMAÇÃO SITE/01. BINCÁ/BINCA OFICIAL v4/BINCA OFICIAL/src/routes/index.tsx", children: void 0, preloads: ["/assets/index-lLvvacMO.js", "/assets/createLucideIcon-BssenWHM.js"] }, "/admin": { filePath: "D:/04. VENTURA PRODUÇÕES/04. PROGRAMAÇÃO SITE/01. BINCÁ/BINCA OFICIAL v4/BINCA OFICIAL/src/routes/admin.tsx", children: void 0, preloads: ["/assets/admin-Cmqonh9q.js", "/assets/createLucideIcon-BssenWHM.js"] } } });
-export {
-  tsrStartManifest
-};

@@ -75,16 +75,11 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$h = [
+const __iconNode$g = [
   ["path", { d: "M12 5v14", key: "s699le" }],
   ["path", { d: "m19 12-7 7-7-7", key: "1idqje" }]
 ];
-const ArrowDown = createLucideIcon("arrow-down", __iconNode$h);
-const __iconNode$g = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
-];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$g);
+const ArrowDown = createLucideIcon("arrow-down", __iconNode$g);
 const __iconNode$f = [
   ["path", { d: "m5 12 7-7 7 7", key: "hav0vg" }],
   ["path", { d: "M12 19V5", key: "x0mq9r" }]
@@ -215,15 +210,14 @@ export {
   LogOut as L,
   Mail as M,
   Plus as P,
-  Sparkles as S,
+  Sprout as S,
   Trash2 as T,
   Upload as U,
   ArrowDown as a,
-  Sprout as b,
-  Leaf as c,
-  ArrowRight as d,
-  Users as e,
-  Star as f,
-  ChevronDown as g,
-  MessageCircle as h
+  Sparkles as b,
+  Users as c,
+  Leaf as d,
+  Star as e,
+  ChevronDown as f,
+  MessageCircle as g
 };

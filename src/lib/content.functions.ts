@@ -43,3 +43,24 @@ export const fetchSiteData = createServerFn({ method: "GET" }).handler(async () 
     };
   }
 });
+
+export const getEvents = createServerFn({ method: "GET" }).handler(async () => {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("events")
+      .select("*")
+      .eq("active", true)
+      .order("date", { ascending: true })
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      console.warn("[getEvents] erro ao buscar eventos", error);
+      return [];
+    }
+
+    return data ?? [];
+  } catch (error) {
+    console.warn("[getEvents] Supabase indisponível ou tabela não existe", error);
+    return [];
+  }
+});

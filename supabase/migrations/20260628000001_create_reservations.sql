@@ -5,6 +5,7 @@ CREATE TABLE public.reservations (
   email TEXT,
   children JSONB NOT NULL DEFAULT '[]',
   children_count INTEGER DEFAULT 1,
+  workshop_id TEXT,
   workshop_name TEXT,
   workshop_date TEXT,
   amount NUMERIC,

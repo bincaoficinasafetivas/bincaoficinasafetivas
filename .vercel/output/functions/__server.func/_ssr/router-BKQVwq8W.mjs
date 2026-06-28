@@ -21,7 +21,7 @@ import "node:async_hooks";
 import "../_libs/h3-v2.mjs";
 import "../_libs/rou3.mjs";
 import "../_libs/srvx.mjs";
-const appCss = "/assets/styles-B4BMXaq0.css";
+const appCss = "/assets/styles-BSsmb-tF.css";
 function reportLovableError(error, context = {}) {
   if (typeof window === "undefined") return;
   console.error(
@@ -156,7 +156,7 @@ ${urls}
     }
   }
 });
-const $$splitComponentImporter$1 = () => import("./admin-v0xnUIp0.mjs");
+const $$splitComponentImporter$1 = () => import("./admin-lK9Tf5yq.mjs");
 const Route$1 = createFileRoute("/admin")({
   ssr: false,
   head: () => ({
@@ -184,11 +184,14 @@ var createSsrRpc = (functionId) => {
 const fetchSiteData = createServerFn({
   method: "GET"
 }).handler(createSsrRpc("5244a67b68ceb527fae48d774c097258b513ffc44a551a015fc31435aabfe13d"));
+const getEvents = createServerFn({
+  method: "GET"
+}).handler(createSsrRpc("983784792a07c78bf803d9be8fd2898677821847d5acea81d91684e3d93248bc"));
 const siteQuery = queryOptions({
   queryKey: ["site-data"],
   queryFn: () => fetchSiteData()
 });
-const $$splitComponentImporter = () => import("./index-D40urU04.mjs");
+const $$splitComponentImporter = () => import("./index-sVXFaIZo.mjs");
 const Route = createFileRoute("/")({
   loader: ({
     context
@@ -249,6 +252,7 @@ const router = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
 }, Symbol.toStringTag, { value: "Module" }));
 export {
   createSsrRpc as c,
+  getEvents as g,
   router as r,
   siteQuery as s
 };

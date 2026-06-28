@@ -676,6 +676,22 @@
 .cta-final .btn-primary, .cta-final .btn-whatsapp {
   position:relative; z-index:1; font-size:18px; padding:18px 40px; }
 
+/* Sponsors grid: controla espaçamento e responsividade dos tiles de patrocinadores */
+.sponsors-grid {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  max-width: 1100px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .sponsors-grid { gap: 20px; }
+}
+
 /* FOOTER */
 .binca-footer { background: var(--creme); color: var(--texto-suave);
   padding: 40px 24px 24px; border-top: 1px solid rgba(92,61,46,.08); }
@@ -709,13 +725,20 @@
 .binca-modal img { max-width: 92vw; max-height: 92vh; border-radius:16px; box-shadow: 0 20px 80px rgba(0,0,0,.5); }
 
 /* SPONSORS */
-.sponsor-tile { background: transparent; padding: 0; display:flex; align-items:center; justify-content:center; }
+.sponsor-tile {
+  background: transparent; padding: 0; display:flex; align-items:center; justify-content:center;
+  /* Garante uma área consistente para cada logo (aumentado) */
+  min-width: 240px; min-height: 240px; width: 240px; height: 240px;
+}
 .sponsor-logo {
-  width: 90px; height: 90px; object-fit: contain; display:block;
+  /* Tamanho aumentado dos logos dos patrocinadores (padrão maior) */
+  width: 240px; height: 240px; object-fit: contain; display:block;
   background: transparent; border: none; padding: 0; margin: 0;
 }
 @media (max-width: 600px) {
-  .sponsor-logo { width: 80px; height: 80px; }
+  /* Ajuste padrão em mobile para manter proporção */
+  .sponsor-logo { width: 180px; height: 180px; }
+  .sponsor-tile { min-width: 180px; min-height: 180px; width: 180px; height: 180px; }
   .hero-images { grid-template-columns: 1fr; }
   .hero-img-main { min-height: 220px; }
   .hero-img-sm { min-height: 150px; }

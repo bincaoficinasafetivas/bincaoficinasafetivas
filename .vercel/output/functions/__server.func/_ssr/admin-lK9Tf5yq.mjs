@@ -2,7 +2,7 @@ import { r as reactExports, j as jsxRuntimeExports } from "../_libs/react.mjs";
 import { d as useNavigate, u as useRouter } from "../_libs/tanstack__react-router.mjs";
 import { m as isRedirect } from "../_libs/tanstack__router-core.mjs";
 import { s as supabase } from "./client-IcRWeenY.mjs";
-import { c as createSsrRpc } from "./router-C_iwu42B.mjs";
+import { c as createSsrRpc } from "./router-BKQVwq8W.mjs";
 import { c as createServerFn } from "./index.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { S as Slot } from "../_libs/radix-ui__react-slot.mjs";
@@ -353,7 +353,12 @@ function LoginForm({
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "submit", disabled: loading, className: "btn-primary", style: {
         marginTop: 8
-      }, children: loading ? "Entrando…" : "Entrar" })
+      }, children: loading ? "Entrando…" : "Entrar" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+        display: "flex",
+        justifyContent: "center",
+        marginTop: 8
+      }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { asChild: true, variant: "outline", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/", children: "Voltar ao site" }) }) })
     ] })
   ] }) });
 }
@@ -400,23 +405,22 @@ function AdminDashboard({
         height: "auto"
       }, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "reservas", children: "📋 Reservas" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "proxima", children: "⭐ Próxima Oficina" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "site", children: "Site / SEO" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "hero", children: "Hero" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "sobre", children: "Sobre" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "atividades", children: "Atividades" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "eventos", children: "Eventos" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "como", children: "Como Funciona" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "galeria", children: "Galeria" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "depoimentos", children: "Depoimentos" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "contato", children: "Contato" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "faq", children: "FAQ" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "cta_final", children: "CTA Final" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "evento", children: "Banners" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "evento", children: "Próximo evento" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "apoiadores", children: "Apoiadores" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "footer", children: "Rodapé" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "reservas", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ReservationsEditor, {}) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "proxima", children: /* @__PURE__ */ jsxRuntimeExports.jsx(NextWorkshopEditor, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "site", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ContentEditor, { sectionKey: "site", fields: [{
         k: "name",
         label: "Nome do site"
@@ -476,6 +480,10 @@ function AdminDashboard({
         label: "Imagem secundária B",
         image: true
       }, {
+        k: "img_c",
+        label: "Imagem 4 do Hero",
+        image: true
+      }, {
         k: "stats",
         label: "Estatísticas",
         json: true
@@ -515,6 +523,10 @@ function AdminDashboard({
         label: "Imagem B",
         image: true
       }, {
+        k: "img_c",
+        label: "Imagem 4 do Sobre",
+        image: true
+      }, {
         k: "bullets",
         label: "Lista de benefícios",
         json: true
@@ -541,6 +553,7 @@ function AdminDashboard({
           marginTop: 32
         }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ActivitiesEditor, {}) })
       ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "eventos", children: /* @__PURE__ */ jsxRuntimeExports.jsx(EventsEditor, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "como", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ContentEditor, { sectionKey: "como", fields: [{
         k: "tag",
         label: "Tag"
@@ -1018,6 +1031,240 @@ function ActivitiesEditor() {
     ] }, it.id)) })
   ] });
 }
+function EventsEditor() {
+  const [items, setItems] = reactExports.useState([]);
+  const [loading, setLoading] = reactExports.useState(true);
+  async function load() {
+    setLoading(true);
+    const {
+      data,
+      error
+    } = await supabase.from("events").select("*").order("date", {
+      ascending: true
+    }).order("sort_order", {
+      ascending: true
+    });
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+    setItems(data ?? []);
+    setLoading(false);
+  }
+  reactExports.useEffect(() => {
+    load();
+  }, []);
+  async function add() {
+    const sort = (items[items.length - 1]?.sort_order ?? 0) + 1;
+    const {
+      error
+    } = await supabase.from("events").insert({
+      name: "Nova oficina",
+      description: "Descrição do evento",
+      date: "",
+      time: "",
+      location: "",
+      price: 0,
+      spots_available: 0,
+      image_url: "",
+      active: true,
+      sort_order: sort
+    });
+    if (error) return toast.error(error.message);
+    load();
+  }
+  async function save(item) {
+    const {
+      error
+    } = await supabase.from("events").update({
+      name: item.name,
+      description: item.description,
+      date: item.date,
+      time: item.time,
+      location: item.location,
+      price: item.price,
+      spots_available: item.spots_available,
+      image_url: item.image_url,
+      active: item.active,
+      sort_order: item.sort_order
+    }).eq("id", item.id);
+    if (error) return toast.error(error.message);
+    toast.success("Evento salvo");
+    load();
+  }
+  async function remove(id) {
+    if (!confirm("Excluir este evento?")) return;
+    const {
+      error
+    } = await supabase.from("events").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Evento excluído");
+    load();
+  }
+  function move(i, dir) {
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    const a = items[i];
+    const b = items[j];
+    supabase.from("events").update({
+      sort_order: b.sort_order
+    }).eq("id", a.id).then(() => {
+      supabase.from("events").update({
+        sort_order: a.sort_order
+      }).eq("id", b.id).then(load);
+    });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { style: {
+    padding: 24,
+    borderRadius: 20
+  }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 16
+    }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { style: {
+          fontFamily: "var(--font-display)",
+          fontWeight: 800,
+          fontSize: 22
+        }, children: "Eventos" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: {
+          color: "var(--texto-suave)",
+          marginTop: 4,
+          fontSize: 13
+        }, children: "Liste, edite e ative/desative os eventos que aparecem no site." })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { onClick: add, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 16 }),
+        " Novo evento"
+      ] })
+    ] }),
+    loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+      padding: 20
+    }, children: "Carregando…" }) : items.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+      padding: 20,
+      color: "var(--texto-suave)"
+    }, children: "Nenhum evento cadastrado ainda." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+      display: "grid",
+      gap: 16
+    }, children: items.map((it, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+      border: "1px solid #eee",
+      borderRadius: 16,
+      padding: 16
+    }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        gap: 12
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Nome" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: it.name ?? "", onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+            ...x,
+            name: e.target.value
+          } : x)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Data" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "date", value: it.date ?? "", onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+            ...x,
+            date: e.target.value
+          } : x)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Horário" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "text", value: it.time ?? "", placeholder: "10:00", onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+            ...x,
+            time: e.target.value
+          } : x)) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 12,
+        marginTop: 12
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Local" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: it.location ?? "", onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+            ...x,
+            location: e.target.value
+          } : x)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Preço" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", min: "0", step: "0.01", value: it.price ?? "", onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+            ...x,
+            price: Number(e.target.value)
+          } : x)) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 12,
+        marginTop: 12
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Vagas" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", min: "0", value: it.spots_available ?? "", onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+            ...x,
+            spots_available: Number(e.target.value)
+          } : x)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Status" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            marginTop: 8
+          }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { id: `event-active-${it.id}`, type: "checkbox", checked: !!it.active, onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+              ...x,
+              active: e.target.checked
+            } : x)) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: `event-active-${it.id}`, style: {
+              cursor: "pointer"
+            }, children: it.active ? "Ativo" : "Inativo" })
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        marginTop: 12
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Imagem" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ImagePicker, { value: it.image_url ?? "", onChange: (v) => setItems(items.map((x) => x.id === it.id ? {
+          ...x,
+          image_url: v
+        } : x)) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        marginTop: 12
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Descrição" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Textarea, { rows: 3, value: it.description ?? "", onChange: (e) => setItems(items.map((x) => x.id === it.id ? {
+          ...x,
+          description: e.target.value
+        } : x)) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        display: "flex",
+        gap: 8,
+        marginTop: 14,
+        justifyContent: "flex-end"
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { variant: "destructive", onClick: () => remove(it.id), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14 }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { variant: "outline", onClick: () => move(i, -1), children: /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowUp, { size: 14 }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { variant: "outline", onClick: () => move(i, 1), children: /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowDown, { size: 14 }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: () => save(it), children: "Salvar" })
+      ] })
+    ] }, it.id)) })
+  ] });
+}
 function GalleryEditor() {
   const [items, setItems] = reactExports.useState([]);
   const load = () => supabase.from("gallery").select("*").order("sort_order").then(({
@@ -1456,7 +1703,7 @@ function BannersEditor() {
           fontFamily: "var(--font-display)",
           fontWeight: 800,
           fontSize: 22
-        }, children: "Banners do evento" }),
+        }, children: "Próximo evento" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: {
           color: "var(--texto-suave)",
           fontSize: 13,
@@ -1539,141 +1786,6 @@ function BannersEditor() {
     ] })
   ] });
 }
-function NextWorkshopEditor() {
-  const [v, setV] = reactExports.useState(null);
-  const [saving, setSaving] = reactExports.useState(false);
-  reactExports.useEffect(() => {
-    supabase.from("site_content").select("value").eq("key", "next_workshop").maybeSingle().then(({
-      data
-    }) => setV(data?.value ?? {
-      name: "",
-      date: "",
-      time: "",
-      location: "",
-      address: "",
-      price: 0,
-      vacancies: 0,
-      banner: "",
-      active: true
-    }));
-  }, []);
-  async function save() {
-    setSaving(true);
-    const {
-      error
-    } = await supabase.from("site_content").upsert({
-      key: "next_workshop",
-      value: v
-    });
-    setSaving(false);
-    if (error) toast.error(error.message);
-    else toast.success("Próxima oficina salva!");
-  }
-  if (!v) return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
-    padding: 20
-  }, children: "Carregando…" });
-  const upd = (patch) => setV({
-    ...v,
-    ...patch
-  });
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { style: {
-    padding: 28,
-    borderRadius: 20
-  }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { style: {
-      fontFamily: "var(--font-display)",
-      fontWeight: 800,
-      fontSize: 22,
-      marginBottom: 4
-    }, children: "Próxima Oficina" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: {
-      color: "var(--texto-suave)",
-      fontSize: 13,
-      marginBottom: 20
-    }, children: "Esses dados são usados no formulário de reserva e na mensagem de confirmação por WhatsApp." }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-      display: "grid",
-      gap: 14
-    }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Nome da oficina" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: v.name ?? "", onChange: (e) => upd({
-          name: e.target.value
-        }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 14
-      }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Data" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: v.date ?? "", onChange: (e) => upd({
-            date: e.target.value
-          }), placeholder: "ex. 15/06/2026" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Horário" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: v.time ?? "", onChange: (e) => upd({
-            time: e.target.value
-          }), placeholder: "ex. 9h às 11h" })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Local" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: v.location ?? "", onChange: (e) => upd({
-          location: e.target.value
-        }), placeholder: "ex. Espaço Bincá" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Endereço" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: v.address ?? "", onChange: (e) => upd({
-          address: e.target.value
-        }), placeholder: "Rua, número, bairro, cidade" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 14
-      }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Valor por criança (R$)" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", min: 0, step: "0.01", value: v.price ?? 0, onChange: (e) => upd({
-            price: Number(e.target.value)
-          }) })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Quantidade de vagas" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", min: 0, value: v.vacancies ?? 0, onChange: (e) => upd({
-            vacancies: Number(e.target.value)
-          }) })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { children: "Banner / imagem" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ImagePicker, { value: v.banner ?? "", onChange: (val) => upd({
-          banner: val
-        }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: {
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        marginTop: 6
-      }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: !!v.active, onChange: (e) => upd({
-          active: e.target.checked
-        }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-          fontWeight: 700
-        }, children: "Oficina ativa (aceitando reservas)" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { className: "btn-primary", style: {
-      marginTop: 24
-    }, onClick: save, disabled: saving, children: saving ? "Salvando…" : "Salvar próxima oficina" })
-  ] });
-}
 const STATUS_LABELS = {
   awaiting_contact: "Aguardando contato",
   awaiting_payment: "Aguardando pagamento",
@@ -1696,7 +1808,6 @@ function ReservationsEditor() {
   const [items, setItems] = reactExports.useState([]);
   const [loading, setLoading] = reactExports.useState(true);
   const [selected, setSelected] = reactExports.useState(null);
-  const [workshop, setWorkshop] = reactExports.useState({});
   const [contato, setContato] = reactExports.useState({});
   async function load() {
     setLoading(true);
@@ -1710,13 +1821,10 @@ function ReservationsEditor() {
   }
   reactExports.useEffect(() => {
     load();
-    supabase.from("site_content").select("key,value").in("key", ["next_workshop", "contato"]).then(({
+    supabase.from("site_content").select("key,value").eq("key", "contato").maybeSingle().then(({
       data
     }) => {
-      for (const r of data ?? []) {
-        if (r.key === "next_workshop") setWorkshop(r.value);
-        if (r.key === "contato") setContato(r.value);
-      }
+      setContato(data?.value ?? {});
     });
   }, []);
   async function updateStatus(id, patch) {
@@ -1746,7 +1854,7 @@ function ReservationsEditor() {
     if (!num) return toast.error("Reserva sem WhatsApp");
     const phone = num.length <= 11 ? "55" + num : num;
     const childrenNames = Array.isArray(r.children) ? r.children.map((c) => `${c.name} (${c.age})`).join(", ") : "";
-    const lines = [`Olá, ${r.responsible_name}! ✨`, "", `Sua reserva na Bincá foi *confirmada*!`, childrenNames ? `Crianças: ${childrenNames}` : "", r.workshop_name ? `Oficina: ${r.workshop_name}` : workshop.name ? `Oficina: ${workshop.name}` : "", workshop.date ? `Data: ${workshop.date}` : "", workshop.time ? `Horário: ${workshop.time}` : "", workshop.location ? `Local: ${workshop.location}` : "", workshop.address ? `Endereço: ${workshop.address}` : "", r.amount ? `Valor: R$ ${Number(r.amount).toFixed(2).replace(".", ",")} — pagamento aprovado ✅` : "", "", "Vaga garantida 💚 Te esperamos!"].filter(Boolean).join("\n");
+    const lines = [`Olá, ${r.responsible_name}! ✨`, "", `Sua reserva na Bincá foi *confirmada*!`, childrenNames ? `Crianças: ${childrenNames}` : "", r.workshop_name ? `Oficina: ${r.workshop_name}` : "", "", "", "", "", r.amount ? `Valor: R$ ${Number(r.amount).toFixed(2).replace(".", ",")} — pagamento aprovado ✅` : "", "", "Vaga garantida 💚 Te esperamos!"].filter(Boolean).join("\n");
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(lines)}`, "_blank");
   }
   if (loading) return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {

@@ -1,9 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const ADMIN_EMAIL = "financeirobinca@gmail.com";
-const ADMIN_PASSWORD = "@Binca120523";
-const ADMIN_USERNAME = "financeirobinca";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || import.meta.env.VITE_ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || import.meta.env.VITE_ADMIN_PASSWORD;
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || import.meta.env.VITE_ADMIN_USERNAME;
+
+if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !ADMIN_USERNAME) {
+  throw new Error('Missing admin credentials: ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME');
+}
 
 const loginSchema = z.object({
   username: z.string().min(1).max(100),

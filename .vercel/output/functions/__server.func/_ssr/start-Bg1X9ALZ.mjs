@@ -1,5 +1,5 @@
 import { a as createMiddleware } from "./index.mjs";
-import { s as supabase } from "./client-IcRWeenY.mjs";
+import { s as supabase } from "./client--gSPOeG2.mjs";
 import "../_libs/seroval.mjs";
 import "../_libs/react.mjs";
 import "node:async_hooks";

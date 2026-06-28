@@ -1,6 +1,6 @@
 import { c as createServerRpc } from "./createServerRpc-wV0Vk4NU.mjs";
 import { c as createServerFn } from "./index.mjs";
-import { supabaseAdmin } from "./client.server-BBloQtaf.mjs";
+import { supabaseAdmin } from "./client.server-CgU2i_-t.mjs";
 import "../_libs/seroval.mjs";
 import "../_libs/react.mjs";
 import "node:async_hooks";

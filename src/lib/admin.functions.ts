@@ -5,10 +5,6 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || import.meta.env.VITE_ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || import.meta.env.VITE_ADMIN_PASSWORD;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || import.meta.env.VITE_ADMIN_USERNAME;
 
-if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !ADMIN_USERNAME) {
-  throw new Error('Missing admin credentials: ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME');
-}
-
 const loginSchema = z.object({
   username: z.string().min(1).max(100),
   password: z.string().min(1).max(200),
@@ -25,6 +21,10 @@ const loginSchema = z.object({
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((data) => loginSchema.parse(data))
   .handler(async ({ data }) => {
+    if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !ADMIN_USERNAME) {
+      throw new Error('Missing admin credentials: ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME');
+    }
+
     if (data.username !== ADMIN_USERNAME || data.password !== ADMIN_PASSWORD) {
       throw new Error("Credenciais inválidas");
     }

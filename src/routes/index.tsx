@@ -298,7 +298,9 @@ function HomeInner() {
           <div className="flex-1">
             <div className="reserva-card reserva-evento">
               <div className="section-tag">PRÓXIMOS EVENTOS</div>
-              <h2>Encontre sua próxima oficina sensorial</h2>
+              <h2>
+                Encontre sua próxima <span className="text-[#D96B50]">oficina afetiva</span>
+              </h2>
               {events.length === 0 ? (
                 <p className="section-lead">Em breve, novos eventos serão anunciados ✨</p>
               ) : (
@@ -804,17 +806,16 @@ function HomeInner() {
             <p>{footer.description ?? "Aprender brincando. Conectar para sempre."}</p>
           </div>
 
-          <div className="footer-nav">
+          <div className="footer-nav grid grid-cols-2 gap-2 text-sm md:flex md:flex-col md:gap-8 md:text-base">
             <h4>Navegação</h4>
             <a href="#sobre">Sobre</a>
             <a href="#atividades">Atividades</a>
             <a href="#como">Como Funciona</a>
             <a href="#galeria">Galeria</a>
             <a href="#contato">Contato</a>
-            <a href="/admin">Admin</a>
           </div>
 
-          <div className="footer-socials">
+          <div className="footer-socials text-sm md:text-base">
             <h4>Redes</h4>
             {contato.instagram && (
               <a href={contato.instagram} target="_blank" rel="noopener" aria-label="Instagram">
@@ -829,14 +830,14 @@ function HomeInner() {
             </a>
           </div>
 
-          <div className="footer-location">
+          <div className="footer-location text-center text-sm md:text-base md:text-left">
             <h4>Onde estamos</h4>
             <p>{contato.city ?? "Oficinas presenciais em Imbituba"}</p>
             <p>{contato.region ?? "Santa Catarina — vagas limitadas"}</p>
           </div>
         </div>
 
-        <div className="footer-copy">
+        <div className="footer-copy text-xs">
           <span>© {new Date().getFullYear()} Bincá. {footer.copy ?? "Todos os direitos reservados."}</span>
         </div>
       </footer>

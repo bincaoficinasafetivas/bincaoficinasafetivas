@@ -1,8 +1,8 @@
 import { r as reactExports, j as jsxRuntimeExports } from "../_libs/react.mjs";
 import { d as useNavigate, u as useRouter } from "../_libs/tanstack__react-router.mjs";
 import { m as isRedirect } from "../_libs/tanstack__router-core.mjs";
-import { s as supabase } from "./client-IcRWeenY.mjs";
-import { c as createSsrRpc } from "./router-BKQVwq8W.mjs";
+import { s as supabase } from "./client--gSPOeG2.mjs";
+import { c as createSsrRpc } from "./router-CSBDEXBe.mjs";
 import { c as createServerFn } from "./index.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { S as Slot } from "../_libs/radix-ui__react-slot.mjs";
@@ -857,10 +857,10 @@ function ImagePicker({
       if (upErr) throw upErr;
       const {
         data,
-        error: sErr
-      } = await supabase.storage.from("binca").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-      if (sErr) throw sErr;
-      onChange(data.signedUrl);
+        error: pErr
+      } = supabase.storage.from("binca").getPublicUrl(path);
+      if (pErr) throw pErr;
+      onChange(data.publicUrl);
       toast.success("Imagem enviada!");
     } catch (e) {
       toast.error(e.message ?? "Erro no upload");
@@ -886,7 +886,7 @@ function ImagePicker({
       /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { asChild: true, variant: "outline", disabled: uploading, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { size: 16 }),
         " ",
-        uploading ? "…" : "Upload"
+        uploading ? "Enviando..." : "Upload"
       ] }) })
     ] })
   ] });
@@ -1275,22 +1275,29 @@ function GalleryEditor() {
   }, []);
   async function addEmpty() {
     const sort = (items[items.length - 1]?.sort_order ?? 0) + 1;
-    await supabase.from("gallery").insert({
+    const {
+      data,
+      error
+    } = await supabase.from("gallery").insert({
       image_url: "",
       caption: "",
       sort_order: sort
-    });
-    load();
+    }).select().single();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setItems((prev) => [...prev, data]);
+    await load();
   }
   async function save(it) {
     const {
       error
-    } = await supabase.from("gallery").update({
-      image_url: it.image_url,
-      caption: it.caption,
-      sort_order: it.sort_order
-    }).eq("id", it.id);
+    } = await supabase.from("gallery").upsert(items, {
+      onConflict: ["id"]
+    });
     if (error) return toast.error(error.message);
+    await load();
     toast.success("Salvo");
   }
   async function remove(id) {
@@ -1371,7 +1378,7 @@ function GalleryEditor() {
           gap: 6
         }, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "sm", variant: "destructive", onClick: () => remove(it.id), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 12 }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "sm", onClick: () => save(it), children: "Salvar" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "sm", onClick: () => save(), children: "Salvar" })
         ] })
       ] })
     ] }, it.id)) })

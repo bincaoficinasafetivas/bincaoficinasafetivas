@@ -21,7 +21,7 @@ import "node:async_hooks";
 import "../_libs/h3-v2.mjs";
 import "../_libs/rou3.mjs";
 import "../_libs/srvx.mjs";
-const appCss = "/assets/styles-BSsmb-tF.css";
+const appCss = "/assets/styles-auwl6G20.css";
 function reportLovableError(error, context = {}) {
   if (typeof window === "undefined") return;
   console.error(
@@ -156,7 +156,7 @@ ${urls}
     }
   }
 });
-const $$splitComponentImporter$1 = () => import("./admin-lK9Tf5yq.mjs");
+const $$splitComponentImporter$1 = () => import("./admin-D4r79d0-.mjs");
 const Route$1 = createFileRoute("/admin")({
   ssr: false,
   head: () => ({
@@ -191,7 +191,7 @@ const siteQuery = queryOptions({
   queryKey: ["site-data"],
   queryFn: () => fetchSiteData()
 });
-const $$splitComponentImporter = () => import("./index-sVXFaIZo.mjs");
+const $$splitComponentImporter = () => import("./index-IplLq2ur.mjs");
 const Route = createFileRoute("/")({
   loader: ({
     context

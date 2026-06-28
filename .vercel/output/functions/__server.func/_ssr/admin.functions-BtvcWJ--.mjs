@@ -20,9 +20,9 @@ import "crypto";
 import "async_hooks";
 import "stream";
 import "../_libs/isbot.mjs";
-const ADMIN_EMAIL = "financeirobinca@gmail.com";
-const ADMIN_PASSWORD = "@Binca120523";
-const ADMIN_USERNAME = "financeirobinca";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "financeirobinca@gmail.com";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "@Binca120523";
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "financeirobinca";
 const loginSchema = objectType({
   username: stringType().min(1).max(100),
   password: stringType().min(1).max(200)
@@ -42,7 +42,7 @@ const adminLogin = createServerFn({
   }
   const {
     supabaseAdmin
-  } = await import("./client.server-BBloQtaf.mjs");
+  } = await import("./client.server-CgU2i_-t.mjs");
   const {
     data: list
   } = await supabaseAdmin.auth.admin.listUsers();

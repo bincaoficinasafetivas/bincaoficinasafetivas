@@ -1,0 +1,4 @@
+const tsrStartManifest = () => ({ routes: { __root__: { filePath: "D:/04. VENTURA PRODUÇÕES/04. PROGRAMAÇÃO SITE/01. BINCÁ/BINCA OFICIAL v15/BINCA OFICIAL v7/BINCA OFICIAL v4/BINCA OFICIAL/src/routes/__root.tsx", children: ["/", "/admin", "/sitemap.xml"], preloads: ["/assets/index-B7pg2nuS.js"], scripts: [{ attrs: { type: "module", async: true, src: "/assets/index-B7pg2nuS.js" } }] }, "/": { filePath: "D:/04. VENTURA PRODUÇÕES/04. PROGRAMAÇÃO SITE/01. BINCÁ/BINCA OFICIAL v15/BINCA OFICIAL v7/BINCA OFICIAL v4/BINCA OFICIAL/src/routes/index.tsx", children: void 0, preloads: ["/assets/index-CvR9jkAe.js", "/assets/createLucideIcon-_xo5ofK-.js"] }, "/admin": { filePath: "D:/04. VENTURA PRODUÇÕES/04. PROGRAMAÇÃO SITE/01. BINCÁ/BINCA OFICIAL v15/BINCA OFICIAL v7/BINCA OFICIAL v4/BINCA OFICIAL/src/routes/admin.tsx", children: void 0, preloads: ["/assets/admin-BKv0Yonq.js", "/assets/createLucideIcon-_xo5ofK-.js"] } } });
+export {
+  tsrStartManifest
+};

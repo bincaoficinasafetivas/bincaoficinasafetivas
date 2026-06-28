@@ -1,7 +1,7 @@
 import { j as jsxRuntimeExports, r as reactExports } from "../_libs/react.mjs";
-import { s as siteQuery, g as getEvents } from "./router-BKQVwq8W.mjs";
+import { s as siteQuery, g as getEvents } from "./router-CSBDEXBe.mjs";
 import { u as useSuspenseQuery, q as queryOptions } from "../_libs/tanstack__react-query.mjs";
-import { s as supabase } from "./client-IcRWeenY.mjs";
+import { s as supabase } from "./client--gSPOeG2.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import "./index.mjs";
 import "../_libs/seroval.mjs";
@@ -648,16 +648,15 @@ function HomeInner() {
           }, children: site.name ?? "Bincá" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: footer.description ?? "Aprender brincando. Conectar para sempre." })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "footer-nav", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "footer-nav grid grid-cols-2 gap-2 text-sm md:flex md:flex-col md:gap-8 md:text-base", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Navegação" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#sobre", children: "Sobre" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#atividades", children: "Atividades" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#como", children: "Como Funciona" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#galeria", children: "Galeria" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#contato", children: "Contato" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/admin", children: "Admin" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#contato", children: "Contato" })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "footer-socials", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "footer-socials text-sm md:text-base", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Redes" }),
           contato.instagram && /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: contato.instagram, target: "_blank", rel: "noopener", "aria-label": "Instagram", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Instagram, { size: 16 }),
@@ -672,13 +671,13 @@ function HomeInner() {
             " Contato"
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "footer-location", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "footer-location text-center text-sm md:text-base md:text-left", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Onde estamos" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: contato.city ?? "Oficinas presenciais em Imbituba" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: contato.region ?? "Santa Catarina — vagas limitadas" })
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "footer-copy", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "footer-copy text-xs", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
         "© ",
         (/* @__PURE__ */ new Date()).getFullYear(),
         " Bincá. ",

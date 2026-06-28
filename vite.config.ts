@@ -21,4 +21,11 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  optimizeDeps: {
+    exclude: ['dotenv'],
+  },
+  ssr: {
+    noExternal: [],
+    external: ['dotenv'],
+  },
 });

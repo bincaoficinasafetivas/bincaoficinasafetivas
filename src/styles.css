@@ -719,6 +719,58 @@
   border-top: 1px solid rgba(92,61,46,.08); text-align:center; font-size:13px; color: var(--texto-suave);
 }
 
+.footer-nav.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.footer-nav.grid a {
+  width: 100%;
+}
+.footer-socials {
+  gap: 6px;
+}
+.footer-socials a {
+  gap: 6px;
+  font-size: 13px;
+}
+.footer-socials a svg,
+.footer-nav a svg {
+  width: 14px;
+  height: 14px;
+}
+.footer-location {
+  text-align: center;
+}
+.footer-copy {
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .binca-footer { flex-direction: column; padding: 32px 24px; text-align:center; }
+  .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+  .footer-brand p { max-width: none; }
+  .footer-copy { text-align:center; }
+  .footer-nav h4, .footer-socials h4, .footer-location h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .footer-nav, .footer-socials, .footer-location {
+    gap: 6px;
+  }
+  .footer-location p {
+    font-size: 13px;
+  }
+  .footer-copy {
+    margin: 16px auto 0;
+    padding-top: 12px;
+    font-size: 0.75rem;
+  }
+}
+
 /* MODAL */
 .binca-modal { position:fixed; inset:0; background: rgba(0,0,0,.85); z-index:200;
   display:flex; align-items:center; justify-content:center; padding:20px; cursor:pointer; }

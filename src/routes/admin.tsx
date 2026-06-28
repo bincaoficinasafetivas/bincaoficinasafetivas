@@ -421,11 +421,9 @@ function ImagePicker({ value, onChange }: { value?: string; onChange: (v: string
       const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
       const { error: upErr } = await supabase.storage.from("binca").upload(path, file, { upsert: true });
       if (upErr) throw upErr;
-      const { data, error: sErr } = await supabase.storage
-        .from("binca")
-        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-      if (sErr) throw sErr;
-      onChange(data.signedUrl);
+      const { data, error: pErr } = supabase.storage.from("binca").getPublicUrl(path);
+      if (pErr) throw pErr;
+      onChange(data.publicUrl);
       toast.success("Imagem enviada!");
     } catch (e: any) {
       toast.error(e.message ?? "Erro no upload");
@@ -447,7 +445,7 @@ function ImagePicker({ value, onChange }: { value?: string; onChange: (v: string
           onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])}
         />
         <Button asChild variant="outline" disabled={uploading}>
-          <span><Upload size={16} /> {uploading ? "…" : "Upload"}</span>
+          <span><Upload size={16} /> {uploading ? "Enviando..." : "Upload"}</span>
         </Button>
       </label>
     </div>
@@ -720,12 +718,18 @@ function GalleryEditor() {
 
   async function addEmpty() {
     const sort = (items[items.length - 1]?.sort_order ?? 0) + 1;
-    await supabase.from("gallery").insert({ image_url: "", caption: "", sort_order: sort });
-    load();
+    const { data, error } = await supabase.from("gallery").insert({ image_url: "", caption: "", sort_order: sort }).select().single();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setItems((prev) => [...prev, data]);
+    await load();
   }
   async function save(it: any) {
-    const { error } = await supabase.from("gallery").update({ image_url: it.image_url, caption: it.caption, sort_order: it.sort_order }).eq("id", it.id);
+    const { error } = await supabase.from("gallery").upsert(items, { onConflict: ["id"] });
     if (error) return toast.error(error.message);
+    await load();
     toast.success("Salvo");
   }
   async function remove(id: string) {

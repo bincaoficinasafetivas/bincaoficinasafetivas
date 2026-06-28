@@ -4,7 +4,7 @@ import { Suspense, useState } from "react";
 import { fetchSiteData } from "@/lib/content.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Instagram, Facebook, HelpCircle, Mail, ChevronDown, MessageCircle, Heart, Leaf, ShieldCheck } from "lucide-react";
+import { Instagram, HelpCircle, Mail, ChevronDown, MessageCircle, Heart, Leaf, Sparkles, Sprout, Users, Star, ArrowRight } from "lucide-react";
 
 const siteQuery = queryOptions({
   queryKey: ["site-data"],
@@ -15,17 +15,22 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(siteQuery),
   head: () => ({
     meta: [
-      { title: "Bincá · Oficinas Afetivas" },
+      { title: "Bincá Oficinas Afetivas | Oficinas sensoriais para crianças de 0 a 6 anos" },
       {
         name: "description",
         content:
-          "Oficinas sensoriais afetivas para crianças de 0 a 6 anos em Imbituba/SC. Experiências naturais que fortalecem o vínculo entre pais e filhos.",
+          "Oficinas sensoriais presenciais para crianças de 0 a 6 anos, com materiais naturais, experiências afetivas e conexão entre pais e filhos.",
       },
-      { property: "og:title", content: "Bincá · Oficinas Afetivas" },
+      {
+        name: "keywords",
+        content:
+          "oficinas sensoriais infantis, oficinas para crianças de 0 a 6 anos, atividades sensoriais para crianças, brincadeiras sensoriais, oficinas para pais e filhos, atividades infantis em Imbituba",
+      },
+      { property: "og:title", content: "Bincá Oficinas Afetivas | Oficinas sensoriais para crianças de 0 a 6 anos" },
       {
         property: "og:description",
         content:
-          "Vivências sensoriais para você e seu filho de 0 a 6 anos.",
+          "Oficinas sensoriais presenciais para crianças de 0 a 6 anos, com materiais naturais, experiências afetivas e conexão entre pais e filhos.",
       },
     ],
   }),
@@ -66,6 +71,171 @@ function HomeInner() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalImg, setModalImg] = useState<string | null>(null);
 
+  const heroCopy = {
+    tag: "APRENDER BRINCANDO, CONECTAR PARA SEMPRE",
+    title_a: "Oficinas sensoriais com",
+    title_em: "afeto",
+    title_b: "para crianças de 2 a 9 anos",
+    subtitle:
+      "Experiências presenciais que estimulam os sentidos, fortalecem o vínculo entre pais e filhos e criam memórias que duram para sempre.",
+    supportingText:
+      "Materiais naturais, ambientes acolhedores e atividades pensadas para cada fase do desenvolvimento.",
+    cta_primary: "Ver próximas oficinas",
+    cta_secondary: "Como funciona",
+  };
+
+  const metrics = [
+    { label: "+200 famílias atendidas", icon: Sparkles },
+    { label: "+60 atividades únicas", icon: Sprout },
+    { label: "Vínculos que ficam para sempre", icon: Heart },
+    { label: "Materiais naturais e atóxicos", icon: Leaf },
+  ];
+
+  const heroImages = [
+    {
+      src: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1000&q=80",
+      alt: "Criança explorando materiais naturais",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
+      alt: "Família brincando em ambiente acolhedor",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
+      alt: "Detalhe de folhas e materiais naturais",
+    },
+  ];
+
+  const heroVisualImages = heroImages.length >= 4
+    ? heroImages.slice(0, 4)
+    : [...heroImages, ...Array.from({ length: 4 - heroImages.length }, () => heroImages[0])];
+
+  const essenceImages = [
+    {
+      src: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1000&q=80",
+      alt: "Criança explorando a natureza",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1000&q=80",
+      alt: "Mãos em contato com folhas e pedras",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1000&q=80",
+      alt: "Pai e mãe interagindo com a criança",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1000&q=80",
+      alt: "Detalhe de materiais naturais",
+    },
+  ];
+
+  const essenceBenefits = [
+    "Materiais naturais e atóxicos",
+    "Conexão real entre pais e filhos",
+    "Estímulo sensorial com propósito",
+    "Memórias afetivas que permanecem",
+  ];
+
+  const activityCards = [
+    {
+      title: "Exploração da Natureza",
+      description: "Atividades sensoriais para descobrir texturas, cores e movimentos da natureza com calma, curiosidade e presença.",
+      ageRange: "2–4 anos",
+      image: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
+      icon: Sprout,
+    },
+    {
+      title: "Brincadeiras Sensoriais",
+      description: "Vivências pensadas para estimular os sentidos, a linguagem e a autonomia em cada etapa da infância.",
+      ageRange: "5–7 anos",
+      image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=900&q=80",
+      icon: Sparkles,
+    },
+    {
+      title: "Oficinas em Família",
+      description: "Momentos acolhedores em que pais e filhos se conectam por meio de brincadeiras intencionais e naturais.",
+      ageRange: "8–9 anos",
+      image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
+      icon: Users,
+    },
+  ];
+
+  const howSteps = [
+    {
+      title: "Escolha sua oficina",
+      desc: "Navegue pelo calendário e escolha a oficina ideal para a faixa etária e os interesses do seu filho.",
+    },
+    {
+      title: "Faça sua inscrição",
+      desc: "Preencha os dados e reserve a vaga de forma simples, segura e acolhedora.",
+    },
+    {
+      title: "Apareça e mergulhe",
+      desc: "Chegue com o coração aberto e deixe o resto com a gente. Nossa equipe cuida dos materiais e do ambiente para vocês aproveitarem juntos.",
+    },
+  ];
+
+  const galleryItems = [
+    {
+      src: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1200&q=80",
+      alt: "Criança explorando com lupa e cesta",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
+      alt: "Mãos mexendo em materiais naturais",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1200&q=80",
+      alt: "Família interagindo em oficina",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=80",
+      alt: "Detalhe de mãozinhas com folhas e flores",
+    },
+  ];
+
+  const testimonialCards = [
+    {
+      text: "O Bincá foi um respiro pra nossa rotina. Meu filho se conectou de um jeito que eu nunca tinha visto. Ele fala das oficinas até hoje!",
+      name: "Mariana S.",
+      role: "Mãe do Léo, 2 anos",
+      stars: 5,
+    },
+    {
+      text: "As atividades são incríveis! Tudo é pensado com tanto carinho que a gente sente confiança desde o primeiro momento.",
+      name: "Juliana C.",
+      role: "Mãe da Clara, 3 anos",
+      stars: 5,
+    },
+    {
+      text: "Um espaço acolhedor, materiais naturais e profissionais atenciosos. Recomendo de olhos fechados para todas as famílias.",
+      name: "Ricardo M.",
+      role: "Pai do Mateus, 4 anos",
+      stars: 5,
+    },
+  ];
+
+  const faqItems = [
+    { q: "Qual a faixa etária das oficinas?", a: "Atendemos crianças de 2 a 9 anos, com propostas pensadas para cada etapa do desenvolvimento." },
+    { q: "Precisa acompanhar a criança?", a: "Sim, as oficinas são pensadas para a presença dos pais ou responsáveis, fortalecendo o vínculo no processo." },
+    { q: "Como faço para reservar uma vaga?", a: "Você pode preencher o formulário da página ou falar com a gente pelo WhatsApp para garantir sua participação." },
+    { q: "Os materiais são seguros?", a: "Sim. Trabalhamos com materiais naturais, atóxicos e escolhidos com carinho para o ambiente e para as crianças." },
+  ];
+
+  const ctaCopy = {
+    tag: "VEM VIVER O BINCÁ",
+    title_a: "Pronta para uma experiência",
+    title_em: "afetiva",
+    title_b: "inesquecível?",
+    subtitle: "Conecte seu filho com a natureza, os sentidos e memórias que ficam para sempre.",
+    cta: "Falar no WhatsApp",
+    benefits: [
+      "Materiais naturais e atóxicos",
+      "Seguro para diferentes faixas etárias",
+      "Ambiente acolhedor",
+    ],
+  };
+
   const waNumber = (contato.whatsapp_number ?? "").replace(/\D/g, "") || "5548999999999";
   const waLink = (msg?: string) =>
     `https://wa.me/${waNumber}?text=${encodeURIComponent(msg ?? contato.wa_template ?? "Olá!")}`;
@@ -74,192 +244,217 @@ function HomeInner() {
     <div className="binca">
       {/* HEADER */}
       <header className="binca-header">
-        {site.logo ? (
-          <a href="#inicio">
-            <img src={site.logo} alt={site.name ?? "Bincá"} className="logo" />
-          </a>
-        ) : (
-          <a href="#inicio" style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 28, color: "var(--coral)", textDecoration: "none" }}>
-            Bincá
-          </a>
-        )}
-        <button className="menu-toggle" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
-          ☰
-        </button>
-        <nav className={`binca-nav desktop ${menuOpen ? "mobile-open" : ""}`}>
-          <a href="#sobre" onClick={() => setMenuOpen(false)}>Sobre</a>
-          <a href="#atividades" onClick={() => setMenuOpen(false)}>Atividades</a>
-          <a href="#como" onClick={() => setMenuOpen(false)}>Como Funciona</a>
-          <a href="#galeria" onClick={() => setMenuOpen(false)}>Galeria</a>
-          <a href="#contato" onClick={() => setMenuOpen(false)}>Contato</a>
-          <a href="#contato" className="btn-nav" onClick={() => setMenuOpen(false)}>
-            Reservar vaga
-          </a>
-        </nav>
+        <div className="header-inner">
+          {site.logo ? (
+            <a href="#inicio" className="brand-link">
+              <img src={site.logo} alt={site.name ?? "Bincá"} className="logo" />
+            </a>
+          ) : (
+            <a href="#inicio" className="brand-link" style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 28, color: "var(--coral)", textDecoration: "none" }}>
+              Bincá
+            </a>
+          )}
+          <button className="menu-toggle" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
+            ☰
+          </button>
+          <nav className={`binca-nav desktop ${menuOpen ? "mobile-open" : ""}`}>
+            <a href="#sobre" onClick={() => setMenuOpen(false)}>Sobre</a>
+            <a href="#atividades" onClick={() => setMenuOpen(false)}>Atividades</a>
+            <a href="#como" onClick={() => setMenuOpen(false)}>Como Funciona</a>
+            <a href="#galeria" onClick={() => setMenuOpen(false)}>Galeria</a>
+            <a href="#contato" onClick={() => setMenuOpen(false)}>Contato</a>
+            <a href="#reserva" className="btn-nav" onClick={() => setMenuOpen(false)}>
+              Reservar vaga
+            </a>
+          </nav>
+        </div>
       </header>
 
-      {/* HERO */}
-      <section className="hero" id="inicio">
-        <div className="hero-text">
-          {hero.tag && <div className="hero-tag fade-up">{hero.tag}</div>}
-          <h1 className="hero-h1 fade-up">
-            {hero.title_a} <em>{hero.title_em}</em> {hero.title_b}
-          </h1>
-          <p className="hero-sub fade-up">{hero.subtitle}</p>
-          <div className="hero-btns fade-up">
-            {hero.cta_primary && (
-              <a href={hero.cta_primary_link ?? "#contato"} className="btn-primary">
-                {hero.cta_primary}
-              </a>
-            )}
-            {hero.cta_secondary && (
-              <a href={hero.cta_secondary_link ?? "#como"} className="btn-secondary">
-                {hero.cta_secondary}
+      <section className="reserva-section scroll-mt-20" id="reserva">
+        <div className="reserva-grid">
+          <div className="reserva-card reserva-evento">
+            <div className="section-tag">{nextWS.tag ?? "PRÓXIMA OFICINA"}</div>
+            <h2>{nextWS.title ?? "Vem aí uma nova oficina afetiva para sua família"}</h2>
+            <p className="section-lead">
+              {nextWS.description ?? "Inscrições abertas para a próxima vivência sensorial."}
+            </p>
+            <div className="reserva-banner">
+              {nextWS.image_url ? (
+                <img src={nextWS.image_url} alt={nextWS.title ?? "Próxima Oficina"} loading="lazy" />
+              ) : (
+                <div className="reserva-banner-fallback">
+                  <span>Próxima Oficina</span>
+                </div>
+              )}
+            </div>
+            {(nextWS.cta_text || nextWS.cta || nextWS.cta_label) && (
+              <a href={nextWS.cta_link ?? "#reserva"} className="btn-primary">
+                {nextWS.cta_text ?? nextWS.cta ?? nextWS.cta_label ?? "Quero participar"}
               </a>
             )}
           </div>
-          {Array.isArray(hero.stats) && hero.stats.length > 0 && (
-            <div className="hero-stats fade-up">
-              {hero.stats.map((s: any, i: number) => (
-                <div key={i}>
-                  <div className="stat-num">{s.num}</div>
-                  <div className="stat-label">{s.label}</div>
-                </div>
-              ))}
+
+          <div className="reserva-card reserva-form-card">
+            <div className="reserva-copy">
+              <div className="section-tag">RESERVE SUA VAGA</div>
+              <h2>
+                Garanta sua participação <span>agora</span>
+              </h2>
+              <p className="section-lead">
+                Preencha o formulário abaixo e receba as instruções de pagamento para confirmar a sua reserva.
+              </p>
             </div>
-          )}
-        </div>
-        <div className="hero-images">
-          {hero.badge && (
-            <div className="hero-badge">
-              <div className="hero-badge-dot" />
-              {hero.badge}
-            </div>
-          )}
-          {hero.img_main && (
-            <div className="hero-img-main">
-              <img src={hero.img_main} alt="Oficina Bincá" loading="eager" />
-            </div>
-          )}
-          {hero.img_a && (
-            <div className="hero-img-sm">
-              <img src={hero.img_a} alt="Brincadeira sensorial" loading="lazy" />
-            </div>
-          )}
-          {hero.img_b && (
-            <div className="hero-img-sm">
-              <img src={hero.img_b} alt="Vivência afetiva" loading="lazy" />
-            </div>
-          )}
+            <ReservationForm workshop={nextWS} />
+          </div>
         </div>
       </section>
 
-      {/* SOBRE */}
-      <section className="sobre" id="sobre">
-        <div className="sobre-img-grid">
-          {sobre.img_main && (
-            <div className="sobre-img">
-              <img src={sobre.img_main} alt="Espaço Bincá" loading="lazy" />
-            </div>
-          )}
-          {sobre.img_a && (
-            <div className="sobre-img">
-              <img src={sobre.img_a} alt="Vivência afetiva" loading="lazy" />
-            </div>
-          )}
-          {sobre.img_b && (
-            <div className="sobre-img">
-              <img src={sobre.img_b} alt="Conexão" loading="lazy" />
-            </div>
-          )}
+      {/* HERO */}
+      <section className="hero scroll-mt-20" id="inicio">
+        <div className="hero-text">
+          <div className="hero-tag fade-up">{heroCopy.tag}</div>
+          <h1 className="hero-h1 fade-up">
+            {heroCopy.title_a} <em>{heroCopy.title_em}</em> {heroCopy.title_b}
+          </h1>
+          <p className="hero-sub fade-up">{heroCopy.subtitle}</p>
+          <p className="hero-sub hero-sub-secondary fade-up">{heroCopy.supportingText}</p>
         </div>
-        <div className="sobre-texto">
-          <div className="section-tag">{sobre.tag}</div>
-          <h2>
-            {sobre.title_a} <span>{sobre.title_em}</span> {sobre.title_b}
-          </h2>
-          <p className="section-lead">{sobre.text}</p>
-          {Array.isArray(sobre.bullets) && (
-            <ul className="check-list">
-              {sobre.bullets.map((b: any, i: number) => (
-                <li key={i}>
-                  <div className="check-icon">{b.icon}</div>
-                  <span>{b.text}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {sobre.cta && (
-            <a href={sobre.cta_link ?? "#contato"} className="btn-primary">
-              {sobre.cta}
-            </a>
-          )}
-        </div>
-      </section>
-
-      {/* ATIVIDADES */}
-      <section className="atividades" id="atividades">
-        <div className="atividades-header">
-          <div className="section-tag">{atvH.tag}</div>
-          <h2>
-            {atvH.title_a} <span>{atvH.title_em}</span> {atvH.title_b}
-          </h2>
-          <p className="section-lead">{atvH.subtitle}</p>
-        </div>
-        <div className="cards-grid">
-          {activities.map((a: any) => (
-            <article key={a.id} className="binca-card">
-              {a.image_url && (
-                <div className="card-img">
-                  <img src={a.image_url} alt={a.title} loading="lazy" />
-                </div>
-              )}
-              <div className="card-body">
-                <div className="card-emoji">{a.emoji}</div>
-                <h3 className="card-title">{a.title}</h3>
-                <p className="card-desc">{a.description}</p>
-                {a.age_range && <span className="card-pill">{a.age_range}</span>}
-              </div>
-            </article>
+        <div className="hero-images" aria-label="Galeria de imagens da hero">
+          <div className="hero-visual-blob" aria-hidden="true" />
+          <div className="hero-decor hero-decor-leaf" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 14C34 16 22 32 16 46C24 40 36 38 48 36C42 28 42 20 50 14Z" fill="rgba(122,154,98,0.28)" />
+              <path d="M20 18C28 20 34 28 36 36C30 34 24 28 20 18Z" fill="rgba(122,154,98,0.16)" />
+            </svg>
+          </div>
+          <div className="hero-decor hero-decor-dots" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="hero-decor hero-decor-heart" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 20C11.4 20 5 15.4 5 10.2C5 7 7.4 5 10.1 5C11.4 5 12.3 5.7 12.8 6.5C13.3 5.7 14.2 5 15.5 5C18.2 5 20.6 7 20.6 10.2C20.6 15.4 14.2 20 12 20Z" fill="rgba(140,94,178,0.9)" />
+            </svg>
+          </div>
+          {heroVisualImages.map((item, index) => (
+            <div key={`${item.alt}-${index}`} className={`hero-photo-card hero-photo-card--${index + 1}`}>
+              <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
+            </div>
           ))}
         </div>
       </section>
 
-      {/* COMO FUNCIONA */}
-      <section className="como" id="como">
-        <div className="como-inner" style={{ textAlign: "center" }}>
-          <div className="section-tag">{como.tag}</div>
+      {/* SOBRE */}
+      <section className="sobre essence-section scroll-mt-20" id="sobre">
+        <div className="essence-gallery" aria-label="Galeria de imagens da seção sobre">
+          <div className="essence-visual-blob" aria-hidden="true" />
+          <div className="essence-decor essence-decor-leaf" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 14C34 16 22 32 16 46C24 40 36 38 48 36C42 28 42 20 50 14Z" fill="rgba(122,154,98,0.24)" />
+            </svg>
+          </div>
+          <div className="essence-decor essence-decor-dots" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+          {essenceImages.map((item, index) => (
+            <div key={`${item.alt}-${index}`} className={`essence-photo essence-photo-${index + 1}`}>
+              <img src={item.src} alt={item.alt} loading="lazy" />
+            </div>
+          ))}
+        </div>
+        <div className="sobre-texto">
+          <div className="section-tag">NOSSA ESSÊNCIA</div>
           <h2>
-            {como.title_a} <span>{como.title_em}</span> {como.title_b}
+            Brincar com intenção <span>transforma</span>
           </h2>
-          <p className="section-lead" style={{ margin: "0 auto" }}>{como.subtitle}</p>
-          <div className="steps" style={{ textAlign: "left" }}>
-            {Array.isArray(como.steps) &&
-              como.steps.map((s: any, i: number) => (
-                <div key={i} className="step">
-                  <div className="step-num">{i + 1}</div>
-                  <div className="step-content">
-                    <div className="step-title">{s.title}</div>
-                    <div className="step-desc">{s.desc}</div>
-                  </div>
+          <p className="section-lead">
+            Acreditamos que o brincar é a linguagem da infância e a base para um desenvolvimento integral. Nossas oficinas unem natureza, sentidos e vínculos afetivos para nutrir corpo, mente e coração.
+          </p>
+          <ul className="check-list benefit-list">
+            {essenceBenefits.map((benefit, index) => (
+              <li key={index}>
+                <div className="check-icon">
+                  <Leaf size={14} />
                 </div>
-              ))}
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ATIVIDADES */}
+      <section className="atividades scroll-mt-20" id="atividades">
+        <div className="atividades-header">
+          <div className="section-tag">OFICINAS QUE ENCANTAM</div>
+          <h2>
+            Cada fase da infância merece <span>um jeito especial</span> de brincar
+          </h2>
+          <p className="section-lead">
+            Nossas propostas são pensadas para acolher crianças de 2 a 9 anos com carinho, segurança e estímulos sensoriais verdadeiros.
+          </p>
+        </div>
+        <div className="cards-grid">
+          {activityCards.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <article key={index} className="binca-card">
+                <div className="card-img">
+                  <img src={item.image} alt={item.title} loading="lazy" />
+                </div>
+                <div className="card-body">
+                  <div className="card-emoji">
+                    <Icon size={22} />
+                  </div>
+                  <h3 className="card-title">{item.title}</h3>
+                  <p className="card-desc">{item.description}</p>
+                  <span className="card-pill">Faixa etária: {item.ageRange}</span>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* COMO FUNCIONA */}
+      <section className="como scroll-mt-20" id="como">
+        <div className="como-inner" style={{ textAlign: "center" }}>
+          <div className="section-tag">PASSO A PASSO</div>
+          <h2>
+            Simples como <span>brincar</span>
+          </h2>
+          <p className="section-lead" style={{ margin: "0 auto" }}>
+            Criamos um processo leve e acolhedor para que tudo seja fácil para as famílias.
+          </p>
+          <div className="steps" style={{ textAlign: "left" }}>
+            {howSteps.map((step, index) => (
+              <div key={index} className="step">
+                <div className="step-num">{index + 1}</div>
+                <div className="step-content">
+                  <div className="step-title">{step.title}</div>
+                  <div className="step-desc">{step.desc}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* GALERIA */}
-      <section className="galeria" id="galeria">
+      <section className="galeria scroll-mt-20" id="galeria">
         <div className="galeria-header">
-          <div className="section-tag">{galeria.tag}</div>
+          <div className="section-tag">MOMENTOS REAIS</div>
           <h2>
-            {galeria.title_a} <span>{galeria.title_em}</span> {galeria.title_b}
+            Assim são nossas <span>oficinas</span>
           </h2>
         </div>
-        <div className="galeria-strip">
-          {gallery.map((g: any) => (
-            <div key={g.id} className="gal-item" onClick={() => setModalImg(g.image_url)}>
-              <img src={g.image_url} alt={g.caption ?? "Galeria Bincá"} loading="lazy" />
+        <div className="galeria-grid">
+          {galleryItems.map((item, index) => (
+            <div key={index} className="gal-item">
+              <img src={item.src} alt={item.alt} loading="lazy" />
             </div>
           ))}
         </div>
@@ -268,21 +463,25 @@ function HomeInner() {
       {/* DEPOIMENTOS */}
       <section className="depoimentos" id="depoimentos">
         <div className="dep-header">
-          <div className="section-tag">{depH.tag}</div>
+          <div className="section-tag">FAMÍLIAS FALAM</div>
           <h2>
-            {depH.title_a} <span>{depH.title_em}</span> {depH.title_b}
+            O que as famílias <span>viveram</span>
           </h2>
         </div>
         <div className="dep-grid">
-          {testimonials.map((t: any) => (
-            <article key={t.id} className="dep-card">
-              <div className="dep-stars">{"★".repeat(t.stars ?? 5)}</div>
-              <p className="dep-text">{t.text}</p>
+          {testimonialCards.map((item, index) => (
+            <article key={index} className="dep-card">
+              <div className="dep-stars">
+                {Array.from({ length: item.stars }).map((_, i) => (
+                  <Star key={i} size={14} fill="currentColor" />
+                ))}
+              </div>
+              <p className="dep-text">{item.text}</p>
               <div className="dep-author">
-                <div className="dep-avatar">{t.initials ?? t.name?.[0] ?? "B"}</div>
+                <div className="dep-avatar">{item.name[0]}</div>
                 <div>
-                  <div className="dep-name">{t.name}</div>
-                  <div className="dep-role">{t.role}</div>
+                  <div className="dep-name">{item.name}</div>
+                  <div className="dep-role">{item.role}</div>
                 </div>
               </div>
             </article>
@@ -297,54 +496,45 @@ function HomeInner() {
             <div className="faq-icon-circle"><HelpCircle size={20} /></div>
             <h3>Dúvidas frequentes</h3>
           </div>
-          {faq.length === 0 && (
-            <div style={{ color: "var(--texto-suave)", fontSize: 14, padding: 12 }}>
-              Em breve adicionaremos as perguntas frequentes.
-            </div>
-          )}
-          {faq.map((f, i) => (
+          {faqItems.map((item, i) => (
             <div key={i} className={`faq-item ${openFaq === i ? "open" : ""}`}>
               <button type="button" className="faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                <span>{f.q}</span>
+                <span>{item.q}</span>
                 <ChevronDown size={18} className="faq-chev" />
               </button>
-              {openFaq === i && <div className="faq-a">{f.a}</div>}
+              {openFaq === i && <div className="faq-a">{item.a}</div>}
             </div>
           ))}
         </div>
         <div className="faq-col contact-col">
           <div className="faq-head">
             <div className="faq-icon-circle"><Mail size={20} /></div>
-            <h3>{contato.fale_title ?? "Fale com a gente"}</h3>
+            <h3>Fale com a gente</h3>
           </div>
-          <p className="contact-sub">{contato.fale_sub ?? "Estamos aqui para ajudar você."}</p>
-          {contato.whatsapp_number && (
-            <a href={waLink()} target="_blank" rel="noopener" className="contact-link">
-              <span className="contact-link-icon wa"><MessageCircle size={20} /></span>
-              <span className="contact-link-text">
-                <strong>WhatsApp</strong>
-                <span>{contato.whatsapp ?? "Fale conosco"}</span>
-              </span>
-              <span className="contact-link-arrow">›</span>
-            </a>
-          )}
-          {contato.instagram && (
-            <a href={contato.instagram} target="_blank" rel="noopener" className="contact-link">
-              <span className="contact-link-icon ig"><Instagram size={20} /></span>
-              <span className="contact-link-text">
-                <strong>Instagram</strong>
-                <span>{contato.instagram_handle ?? "@binca.oficinas"}</span>
-              </span>
-              <span className="contact-link-arrow">›</span>
-            </a>
-          )}
+          <p className="contact-sub">Estamos aqui para ajudar você.</p>
+          <a href={waLink("Olá! Gostaria de saber mais sobre as oficinas Bincá.")} target="_blank" rel="noopener" className="contact-link">
+            <span className="contact-link-icon wa"><MessageCircle size={20} /></span>
+            <span className="contact-link-text">
+              <strong>WhatsApp</strong>
+              <span>Fale conosco</span>
+            </span>
+            <span className="contact-link-arrow">›</span>
+          </a>
+          <a href={contato.instagram ?? "https://www.instagram.com/binca.oficinas"} target="_blank" rel="noopener" className="contact-link">
+            <span className="contact-link-icon ig"><Instagram size={20} /></span>
+            <span className="contact-link-text">
+              <strong>Instagram</strong>
+              <span>@binca.oficinas</span>
+            </span>
+            <span className="contact-link-arrow">›</span>
+          </a>
           <div className="contact-note">
-            <Heart size={14} /> {contato.note ?? "Responderemos o mais rápido possível."}
+            <Heart size={14} /> Responderemos o mais rápido possível.
           </div>
         </div>
       </section>
 
-      <section className="contato" id="contato">
+      <section className="contato scroll-mt-20" id="contato">
         <div className="contato-info">
           {evento.tag && <div className="section-tag">{evento.tag}</div>}
           {(evento.title_a || evento.title_em || evento.title_b) && (
@@ -423,7 +613,7 @@ function HomeInner() {
                 background: "rgba(255,255,255,.5)",
               }}
             >
-              Em breve, o banner do próximo evento ✨
+              Em breve, o banner do próximo evento.
             </div>
           )}
           {evento.cta && (
@@ -437,7 +627,6 @@ function HomeInner() {
             </a>
           )}
         </div>
-        <ReservationForm workshop={nextWS} />
       </section>
 
       {/* APOIADORES */}
@@ -462,7 +651,7 @@ function HomeInner() {
         >
           {apoiadores.length === 0 && (
             <div style={{ color: "rgba(255,255,255,.65)" }}>
-              Em breve, nossos parceiros e apoiadores ✨
+              Em breve, nossos parceiros e apoiadores.
             </div>
           )}
           {apoiadores.map((s, i) => {
@@ -491,35 +680,24 @@ function HomeInner() {
       {/* CTA FINAL */}
       <section className="cta-ribbon" id="cta-final" style={ctaFinal.bg ? { background: ctaFinal.bg } : undefined}>
         <div className="cta-ribbon-inner">
-          {ctaFinal.tag !== "" && (
-            <div className="cta-ribbon-tag">✿ {ctaFinal.tag ?? "VEM VIVER O BINCÁ"} ✿</div>
-          )}
+          <div className="cta-ribbon-tag">{ctaCopy.tag}</div>
           <h2 className="cta-ribbon-title">
-            {ctaFinal.title_a ?? "Pronta para uma experiência"} <em>{ctaFinal.title_em ?? "afetiva"}</em> {ctaFinal.title_b ?? "inesquecível?"}
+            {ctaCopy.title_a} <em>{ctaCopy.title_em}</em> {ctaCopy.title_b}
           </h2>
-          <p className="cta-ribbon-sub">
-            {ctaFinal.subtitle ?? "Conecte seu filho com a natureza, os sentidos e memórias que ficam para sempre."}
-          </p>
+          <p className="cta-ribbon-sub">{ctaCopy.subtitle}</p>
           <a
-            href={ctaFinal.cta_link || waLink(ctaFinal.wa_message)}
-            target={(ctaFinal.cta_link || "").startsWith("http") || !ctaFinal.cta_link ? "_blank" : undefined}
+            href={waLink("Olá! Quero conversar sobre as oficinas Bincá.")}
+            target="_blank"
             rel="noopener"
             className="cta-ribbon-btn"
           >
-            <MessageCircle size={20} /> {ctaFinal.cta ?? "Falar no WhatsApp"}
+            <MessageCircle size={20} /> {ctaCopy.cta}
           </a>
           <div className="cta-ribbon-benefits">
-            {(Array.isArray(ctaFinal.benefits) && ctaFinal.benefits.length > 0
-              ? ctaFinal.benefits
-              : [
-                  { icon: "leaf", text: "Materiais naturais e atóxicos" },
-                  { icon: "shield", text: "Seguro para diferentes faixas etárias" },
-                  { icon: "heart", text: "Ambiente acolhedor" },
-                ]
-            ).map((b: any, i: number) => (
-              <div key={i} className="cta-ribbon-benefit">
-                {b.icon === "shield" ? <ShieldCheck size={18} /> : b.icon === "heart" ? <Heart size={18} /> : <Leaf size={18} />}
-                <span>{b.text}</span>
+            {ctaCopy.benefits.map((benefit, index) => (
+              <div key={index} className="cta-ribbon-benefit">
+                <Leaf size={18} />
+                <span>{benefit}</span>
               </div>
             ))}
           </div>
@@ -528,41 +706,52 @@ function HomeInner() {
 
       {/* FOOTER */}
       <footer className="binca-footer">
-        {site.logo ? (
-          <img src={site.logo} alt={site.name ?? "Bincá"} />
-        ) : (
-          <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 24, color: "var(--coral)" }}>
-            {site.name ?? "Bincá"}
-          </span>
-        )}
-        <div className="footer-links">
-          {Array.isArray(footer.links) &&
-            footer.links.map((l: any, i: number) => (
-              <a key={i} href={l.href}>{l.label}</a>
-            ))}
-          {contato.instagram && (
-            <a href={contato.instagram} target="_blank" rel="noopener" aria-label="Instagram"
-               style={{ display:"inline-flex", alignItems:"center", gap:6 }}>
-              <Instagram size={16} /> Instagram
+        <div className="footer-inner">
+          <div className="footer-brand">
+            {site.logo ? (
+              <img src={site.logo} alt={site.name ?? "Bincá"} />
+            ) : (
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 24, color: "var(--coral)" }}>
+                {site.name ?? "Bincá"}
+              </span>
+            )}
+            <p>{footer.description ?? "Aprender brincando. Conectar para sempre."}</p>
+          </div>
+
+          <div className="footer-nav">
+            <h4>Navegação</h4>
+            <a href="#sobre">Sobre</a>
+            <a href="#atividades">Atividades</a>
+            <a href="#como">Como Funciona</a>
+            <a href="#galeria">Galeria</a>
+            <a href="#contato">Contato</a>
+            <a href="/admin">Admin</a>
+          </div>
+
+          <div className="footer-socials">
+            <h4>Redes</h4>
+            {contato.instagram && (
+              <a href={contato.instagram} target="_blank" rel="noopener" aria-label="Instagram">
+                <Instagram size={16} /> Instagram
+              </a>
+            )}
+            <a href={waLink("Olá! Gostaria de saber mais sobre a Bincá.")} target="_blank" rel="noopener">
+              <MessageCircle size={16} /> WhatsApp
             </a>
-          )}
-          <a href="#contato">Contato</a>
-        </div>
-        <div className="footer-location">
-          <span style={{ color: "var(--coral)", fontSize: 18, lineHeight: 1 }}>📍</span>
-          <div>
-            <div className="footer-location-title">{contato.city ?? "Florianópolis - SC"}</div>
-            <div>{contato.region ?? "Atendemos toda a região"}</div>
+            <a href={contato.email ? `mailto:${contato.email}` : "#contato"}>
+              <Mail size={16} /> Contato
+            </a>
+          </div>
+
+          <div className="footer-location">
+            <h4>Onde estamos</h4>
+            <p>{contato.city ?? "Oficinas presenciais em Imbituba"}</p>
+            <p>{contato.region ?? "Santa Catarina — vagas limitadas"}</p>
           </div>
         </div>
+
         <div className="footer-copy">
-          <strong>© {new Date().getFullYear()} Bincá.</strong>
-          {footer.copy ?? "Todos os direitos reservados."}
-          <div style={{ marginTop: 6 }}>
-            <a href="/admin" style={{ color: "var(--texto-suave)", fontSize: 12, textDecoration: "none", opacity:.6 }}>
-              Admin
-            </a>
-          </div>
+          <span>© {new Date().getFullYear()} Bincá. {footer.copy ?? "Todos os direitos reservados."}</span>
         </div>
       </footer>
 
@@ -587,6 +776,18 @@ function ReservationForm({ workshop }: { workshop: any }) {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState<null | { id: string; total: number }>(null);
 
+  const confirmationMessage = "Você precisa confirmar que está ciente das condições da reserva.";
+
+  const requiredFieldsFilled = Boolean(
+    responsavel.trim() &&
+    whatsapp.trim() &&
+    email.trim() &&
+    notes.trim() &&
+    confirmReserva &&
+    children.length > 0 &&
+    children.every((child) => child.name.trim() && child.age.trim())
+  );
+
   function updateChild(i: number, patch: Partial<{ name: string; age: string }>) {
     setChildren((arr) => arr.map((c, idx) => (idx === i ? { ...c, ...patch } : c)));
   }
@@ -599,21 +800,22 @@ function ReservationForm({ workshop }: { workshop: any }) {
 
   const total = price * children.length;
 
+  function handleConfirmInvalid(e: React.InvalidEvent<HTMLInputElement>) {
+    e.preventDefault();
+    toast.error(confirmationMessage);
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!responsavel.trim() || !whatsapp.trim()) {
-      toast.error("Preencha nome e WhatsApp");
+    if (!confirmReserva) {
+      toast.error(confirmationMessage);
+      return;
+    }
+    if (!requiredFieldsFilled) {
+      toast.error("Preencha todos os campos obrigatórios antes de concluir sua reserva.");
       return;
     }
     const validChildren = children.filter((c) => c.name.trim());
-    if (validChildren.length === 0) {
-      toast.error("Adicione pelo menos uma criança");
-      return;
-    }
-    if (!confirmReserva) {
-      toast.error("Confirme sua reserva para continuar");
-      return;
-    }
     setSubmitting(true);
     try {
       const { data, error } = await supabase
@@ -649,7 +851,7 @@ function ReservationForm({ workshop }: { workshop: any }) {
   if (done) {
     return (
       <div className="form-box" style={{ textAlign: "center" }}>
-        <div className="form-title">Reserva recebida! ✨</div>
+        <div className="form-title">Reserva recebida</div>
         <p style={{ color: "var(--texto-suave)", margin: "12px 0 20px", lineHeight: 1.6 }}>
           Sua reserva foi registrada. {done.total > 0 ? <>O valor é <strong>R$ {done.total.toFixed(2).replace(".", ",")}</strong>.</> : null}
           <br />Em breve entraremos em contato com as instruções de pagamento (PIX) para confirmar a vaga.
@@ -663,21 +865,21 @@ function ReservationForm({ workshop }: { workshop: any }) {
 
   return (
     <form className="form-box" onSubmit={submit}>
-      <div className="form-title">Reserve sua vaga ✨</div>
+      <div className="form-title">Reserve sua vaga</div>
       <div className="form-sub">
         Preencha os campos abaixo. A vaga é confirmada após o pagamento ser aprovado.
       </div>
       <div className="form-group">
         <label>Nome do responsável *</label>
-        <input required maxLength={120} value={responsavel} onChange={(e) => setResponsavel(e.target.value)} />
+        <input maxLength={120} value={responsavel} onChange={(e) => setResponsavel(e.target.value)} />
       </div>
       <div className="form-row">
         <div className="form-group">
           <label>WhatsApp *</label>
-          <input required maxLength={30} value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="(48) 9..." />
+          <input maxLength={30} value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="(48) 9..." />
         </div>
         <div className="form-group">
-          <label>E-mail</label>
+          <label>E-mail *</label>
           <input type="email" maxLength={120} value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
       </div>
@@ -689,11 +891,11 @@ function ReservationForm({ workshop }: { workshop: any }) {
         <div key={i} style={{ background: "var(--creme2)", borderRadius: 14, padding: 14, marginBottom: 10 }}>
           <div className="form-row">
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Nome da criança {i + 1}</label>
+              <label>Nome da criança {i + 1} *</label>
               <input maxLength={80} value={c.name} onChange={(e) => updateChild(i, { name: e.target.value })} />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Idade</label>
+              <label>Idade da criança *</label>
               <input maxLength={20} value={c.age} onChange={(e) => updateChild(i, { age: e.target.value })} placeholder="ex. 2 anos" />
             </div>
           </div>
@@ -721,7 +923,7 @@ function ReservationForm({ workshop }: { workshop: any }) {
       </button>
 
       <div className="form-group">
-        <label>Observações</label>
+        <label>Observações *</label>
         <textarea maxLength={1000} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Algo importante sobre a criança ou a reserva?" />
       </div>
 
@@ -736,11 +938,13 @@ function ReservationForm({ workshop }: { workshop: any }) {
         <label style={{ display: "flex", gap: 10, alignItems: "flex-start", cursor: "pointer", fontSize: 14, color: "var(--texto)", lineHeight: 1.5 }}>
           <input
             type="checkbox"
+            required
             checked={confirmReserva}
             onChange={(e) => setConfirmReserva(e.target.checked)}
+            onInvalid={handleConfirmInvalid}
             style={{ marginTop: 3, width: 18, height: 18, accentColor: "var(--coral)", flexShrink: 0 }}
           />
-          <span><strong>Confirmo minha reserva</strong> e os dados informados acima. Entendo que a vaga só será garantida após a confirmação do pagamento.</span>
+          <span><strong>Confirmo minha reserva e declaro que os dados informados estão corretos. Estou ciente de que a vaga só será garantida após a confirmação do pagamento e que, após a reserva confirmada, não haverá reembolso.</strong></span>
         </label>
         <label style={{ display: "flex", gap: 10, alignItems: "flex-start", cursor: "pointer", fontSize: 14, color: "var(--texto)", lineHeight: 1.5 }}>
           <input
@@ -753,8 +957,8 @@ function ReservationForm({ workshop }: { workshop: any }) {
         </label>
       </div>
 
-      <button type="submit" disabled={submitting || !confirmReserva} className="btn-primary" style={{ width: "100%", justifyContent: "center", opacity: submitting || !confirmReserva ? 0.6 : 1 }}>
-        {submitting ? "Enviando…" : "Concluir minha reserva ✨"}
+      <button type="submit" disabled={submitting || !requiredFieldsFilled} className="btn-primary" style={{ display: "block", width: "auto", minWidth: 220, justifyContent: "center", opacity: submitting || !requiredFieldsFilled ? 0.6 : 1, margin: "0 auto" }}>
+        {submitting ? "Enviando…" : "Concluir minha reserva"}
       </button>
     </form>
   );

@@ -5,6 +5,27 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
+function createMissingSupabaseProxy(message: string) {
+  const error = new Error(message);
+  const promise = Promise.reject(error);
+  promise.catch(() => undefined);
+  let proxy: any = null;
+
+  proxy = new Proxy(() => promise, {
+    get(_target, prop) {
+      if (prop === 'then' || prop === 'catch' || prop === 'finally') {
+        return (promise as any)[prop].bind(promise);
+      }
+      return proxy;
+    },
+    apply() {
+      return proxy;
+    },
+  });
+
+  return proxy as any;
+}
+
 function createSupabaseAdminClient() {
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -14,9 +35,9 @@ function createSupabaseAdminClient() {
       ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
       ...(!SUPABASE_SERVICE_ROLE_KEY ? ['SUPABASE_SERVICE_ROLE_KEY'] : []),
     ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
+    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Configure as variáveis de ambiente no Vercel.`;
     console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    return createMissingSupabaseProxy(message);
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {

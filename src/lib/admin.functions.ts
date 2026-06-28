@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const ADMIN_EMAIL = "binca@binca.app";
+const ADMIN_EMAIL = "financeirobinca@gmail.com";
 const ADMIN_PASSWORD = "@Binca120523";
-const ADMIN_USERNAME = "binca";
+const ADMIN_USERNAME = "financeirobinca";
 
 const loginSchema = z.object({
   username: z.string().min(1).max(100),

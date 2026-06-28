@@ -718,6 +718,7 @@ function HomeInner() {
             <a href="#como">Como Funciona</a>
             <a href="#galeria">Galeria</a>
             <a href="#contato">Contato</a>
+            <a href="/admin">Admin</a>
           </div>
 
           <div className="footer-socials text-sm md:text-base">

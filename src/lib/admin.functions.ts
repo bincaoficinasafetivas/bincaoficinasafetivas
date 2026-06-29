@@ -1,10 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || import.meta.env.VITE_ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || import.meta.env.VITE_ADMIN_PASSWORD;
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || import.meta.env.VITE_ADMIN_USERNAME;
-
 const loginSchema = z.object({
   username: z.string().min(1).max(100),
   password: z.string().min(1).max(200),
@@ -21,6 +17,11 @@ const loginSchema = z.object({
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((data) => loginSchema.parse(data))
   .handler(async ({ data }) => {
+    // Read secrets only inside the handler (server-only)
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+
     if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !ADMIN_USERNAME) {
       throw new Error('Missing admin credentials: ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME');
     }
@@ -28,6 +29,7 @@ export const adminLogin = createServerFn({ method: "POST" })
     if (data.username !== ADMIN_USERNAME || data.password !== ADMIN_PASSWORD) {
       throw new Error("Credenciais inválidas");
     }
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Find or create the admin user
@@ -57,5 +59,6 @@ export const adminLogin = createServerFn({ method: "POST" })
       await supabaseAdmin.from("user_roles").insert({ user_id: user.id, role: "admin" });
     }
 
-    return { email: ADMIN_EMAIL, password: ADMIN_PASSWORD };
+    // Return only non-sensitive info
+    return { email: ADMIN_EMAIL };
   });

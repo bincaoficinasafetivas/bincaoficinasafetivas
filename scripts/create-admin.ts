@@ -1,8 +1,8 @@
 import 'dotenv/config'
 import { supabaseAdmin } from '../src/integrations/supabase/client.server'
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.VITE_ADMIN_EMAIL
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || process.env.VITE_ADMIN_PASSWORD
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
 
 async function main() {
   if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {

@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { fetchSiteData, getEvents } from "@/lib/content.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useServerFn } from '@tanstack/react-start'
+import { processPayment } from '@/lib/api/process-payment.functions'
 import { Instagram, HelpCircle, Mail, ChevronDown, MessageCircle, Heart, Leaf, Sparkles, Sprout, Users, Star, ArrowRight } from "lucide-react";
 
 function formatEventDate(value?: string | null) {
@@ -769,6 +771,9 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
   const [imageConsent, setImageConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState<null | { id: string; total: number }>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'pix' | 'credit_card'>('pix');
+  const [paymentInfo, setPaymentInfo] = useState<any>(null);
+  const processPaymentFn = useServerFn(processPayment);
 
   const confirmationMessage = "Você precisa confirmar que está ciente das condições da reserva.";
 
@@ -863,6 +868,16 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
 
       setDone({ id: data!.id, total });
       toast.success("Reserva registrada!");
+
+      // Initiate payment creation on the server and capture link/QR
+      try {
+        const res = await processPaymentFn({ data: { reservationId: data!.id, paymentMethod } });
+        if (res?.paymentLink || res?.pixQrCode) {
+          setPaymentInfo(res);
+        }
+      } catch (e) {
+        console.warn('processPayment error', e);
+      }
     } catch (err: any) {
       toast.error(err.message ?? "Erro ao enviar reserva");
     } finally {
@@ -878,6 +893,17 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
           Sua reserva foi registrada. {done.total > 0 ? <>O valor é <strong>R$ {done.total.toFixed(2).replace(".", ",")}</strong>.</> : null}
           <br />Em breve entraremos em contato com as instruções de pagamento (PIX) para confirmar a vaga.
         </p>
+        {paymentInfo?.paymentLink && (
+          <div style={{ marginTop: 12 }}>
+            <a href={paymentInfo.paymentLink} target="_blank" rel="noopener" className="btn-primary">Pagar agora</a>
+          </div>
+        )}
+        {paymentInfo?.pixQrCode && (
+          <div style={{ marginTop: 12 }}>
+            <div style={{ marginBottom: 8 }}>QR Code Pix:</div>
+            <img src={paymentInfo.pixQrCode} alt="QR Code Pix" style={{ maxWidth: 220, display: 'block', margin: '0 auto' }} />
+          </div>
+        )}
         <div style={{ background: "var(--creme2)", borderRadius: 12, padding: 16, fontSize: 13, color: "var(--texto-suave)" }}>
           Código da reserva: <strong style={{ color: "var(--texto)" }}>{done.id.slice(0, 8).toUpperCase()}</strong>
         </div>
@@ -920,6 +946,19 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
             </option>
           ))}
         </select>
+        <div className="form-group" style={{ marginTop: 12 }}>
+          <label>Método de pagamento</label>
+          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input type="radio" name="payment_method" value="pix" checked={paymentMethod === 'pix'} onChange={() => setPaymentMethod('pix')} />
+              Pix
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input type="radio" name="payment_method" value="credit_card" checked={paymentMethod === 'credit_card'} onChange={() => setPaymentMethod('credit_card')} />
+              Cartão de crédito
+            </label>
+          </div>
+        </div>
       </div>
 
       <div style={{ marginTop: 4, marginBottom: 14, fontWeight: 700, color: "var(--texto)" }}>

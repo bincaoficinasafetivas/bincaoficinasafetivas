@@ -85,8 +85,8 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const { email, password: pwd } = await ensure({ data: { username, password } });
-      const { error } = await supabase.auth.signInWithPassword({ email, password: pwd });
+      const { email } = await ensure({ data: { username, password } });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast.success("Bem-vindo!");
       onSuccess();

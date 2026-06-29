@@ -29,5 +29,6 @@ export const processPayment = createServerFn({ method: 'POST' })
     return {
       paymentLink: payment.invoiceUrl,
       pixQrCode: payment.pixQrCode ?? null,
+      pixCopyPaste: payment.pixCopyPaste ?? null,
     };
   })

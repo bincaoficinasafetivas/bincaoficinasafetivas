@@ -392,88 +392,92 @@ function HomeInner() {
 
       {/* HERO */}
       <section className="hero scroll-mt-20" id="inicio">
-        <div className="hero-text">
-          <div className="hero-tag fade-up">{heroCopy.tag}</div>
-          <h1 className="hero-h1 fade-up">
-            {heroCopy.title_a} <em>{heroCopy.title_em}</em> {heroCopy.title_b}
-          </h1>
-          <p className="hero-sub fade-up">{heroCopy.subtitle}</p>
-          <p className="hero-sub hero-sub-secondary fade-up">{heroCopy.supportingText}</p>
-        </div>
-        <div className="hero-images" aria-label="Galeria de imagens da hero">
-          <div className="hero-visual-blob" aria-hidden="true" />
-          <div className="hero-decor hero-decor-leaf" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 14C34 16 22 32 16 46C24 40 36 38 48 36C42 28 42 20 50 14Z" fill="rgba(122,154,98,0.28)" />
-              <path d="M20 18C28 20 34 28 36 36C30 34 24 28 20 18Z" fill="rgba(122,154,98,0.16)" />
-            </svg>
+        <div className="hero-inner">
+          <div className="hero-text">
+            <div className="hero-tag fade-up">{heroCopy.tag}</div>
+            <h1 className="hero-h1 fade-up">
+              {heroCopy.title_a} <em>{heroCopy.title_em}</em> {heroCopy.title_b}
+            </h1>
+            <p className="hero-sub fade-up">{heroCopy.subtitle}</p>
+            <p className="hero-sub hero-sub-secondary fade-up">{heroCopy.supportingText}</p>
           </div>
-          <div className="hero-decor hero-decor-dots" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
-          <div className="hero-decor hero-decor-heart" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 20C11.4 20 5 15.4 5 10.2C5 7 7.4 5 10.1 5C11.4 5 12.3 5.7 12.8 6.5C13.3 5.7 14.2 5 15.5 5C18.2 5 20.6 7 20.6 10.2C20.6 15.4 14.2 20 12 20Z" fill="rgba(140,94,178,0.9)" />
-            </svg>
-          </div>
-          {heroVisualImages.map((item, index) => (
-            <div key={`${item.alt}-${index}`} className={`hero-photo-card hero-photo-card--${index + 1}`}>
-              <img
-                src={item.src}
-                alt={item.alt}
-                loading={index === 0 ? "eager" : "lazy"}
-                onError={(e) => { e.currentTarget.src = imageFallback; }}
-              />
+          <div className="hero-images" aria-label="Galeria de imagens da hero">
+            <div className="hero-visual-blob" aria-hidden="true" />
+            <div className="hero-decor hero-decor-leaf" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 14C34 16 22 32 16 46C24 40 36 38 48 36C42 28 42 20 50 14Z" fill="rgba(122,154,98,0.28)" />
+                <path d="M20 18C28 20 34 28 36 36C30 34 24 28 20 18Z" fill="rgba(122,154,98,0.16)" />
+              </svg>
             </div>
-          ))}
+            <div className="hero-decor hero-decor-dots" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="hero-decor hero-decor-heart" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 20C11.4 20 5 15.4 5 10.2C5 7 7.4 5 10.1 5C11.4 5 12.3 5.7 12.8 6.5C13.3 5.7 14.2 5 15.5 5C18.2 5 20.6 7 20.6 10.2C20.6 15.4 14.2 20 12 20Z" fill="rgba(140,94,178,0.9)" />
+              </svg>
+            </div>
+            {heroVisualImages.map((item, index) => (
+              <div key={`${item.alt}-${index}`} className={`hero-photo-card hero-photo-card--${index + 1}`}>
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  onError={(e) => { e.currentTarget.src = imageFallback; }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* SOBRE */}
       <section className="sobre essence-section scroll-mt-20" id="sobre">
-        <div className="essence-gallery" aria-label="Galeria de imagens da seção sobre">
-          <div className="essence-visual-blob" aria-hidden="true" />
-          <div className="essence-decor essence-decor-leaf" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 14C34 16 22 32 16 46C24 40 36 38 48 36C42 28 42 20 50 14Z" fill="rgba(122,154,98,0.24)" />
-            </svg>
-          </div>
-          <div className="essence-decor essence-decor-dots" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
-          {essenceImages.map((item, index) => (
-            <div key={`${item.alt}-${index}`} className={`essence-photo essence-photo-${index + 1}`}>
-              <img
-                src={item.src}
-                alt={item.alt}
-                loading="lazy"
-                onError={(e) => { e.currentTarget.src = imageFallback; }}
-              />
+        <div className="essence-inner">
+          <div className="essence-gallery" aria-label="Galeria de imagens da seção sobre">
+            <div className="essence-visual-blob" aria-hidden="true" />
+            <div className="essence-decor essence-decor-leaf" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 14C34 16 22 32 16 46C24 40 36 38 48 36C42 28 42 20 50 14Z" fill="rgba(122,154,98,0.24)" />
+              </svg>
             </div>
-          ))}
-        </div>
-        <div className="sobre-texto">
-          <div className="section-tag">NOSSA ESSÊNCIA</div>
-          <h2>
-            Brincar com intenção <span>transforma</span>
-          </h2>
-          <p className="section-lead">
-            Acreditamos que o brincar é a linguagem da infância e a base para um desenvolvimento integral. Nossas oficinas unem natureza, sentidos e vínculos afetivos para nutrir corpo, mente e coração.
-          </p>
-          <ul className="check-list benefit-list">
-            {essenceBenefits.map((benefit, index) => (
-              <li key={index}>
-                <div className="check-icon">
-                  <Leaf size={14} />
-                </div>
-                <span>{benefit}</span>
-              </li>
+            <div className="essence-decor essence-decor-dots" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            {essenceImages.map((item, index) => (
+              <div key={`${item.alt}-${index}`} className={`essence-photo essence-photo-${index + 1}`}>
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.src = imageFallback; }}
+                />
+              </div>
             ))}
-          </ul>
+          </div>
+          <div className="sobre-texto">
+            <div className="section-tag">NOSSA ESSÊNCIA</div>
+            <h2>
+              Brincar com intenção <span>transforma</span>
+            </h2>
+            <p className="section-lead">
+              Acreditamos que o brincar é a linguagem da infância e a base para um desenvolvimento integral. Nossas oficinas unem natureza, sentidos e vínculos afetivos para nutrir corpo, mente e coração.
+            </p>
+            <ul className="check-list benefit-list">
+              {essenceBenefits.map((benefit, index) => (
+                <li key={index}>
+                  <div className="check-icon">
+                    <Leaf size={14} />
+                  </div>
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -765,25 +769,58 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
   const [responsavel, setResponsavel] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
+  const [cpf, setCpf] = useState("");
   const [children, setChildren] = useState<{ name: string; age: string }[]>([{ name: "", age: "" }]);
   const [notes, setNotes] = useState("");
   const [confirmReserva, setConfirmReserva] = useState(false);
   const [imageConsent, setImageConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState<null | { id: string; total: number }>(null);
   const [paymentMethod, setPaymentMethod] = useState<'pix' | 'credit_card'>('pix');
-  const [paymentInfo, setPaymentInfo] = useState<any>(null);
   const processPaymentFn = useServerFn(processPayment);
 
+  const [reservationStep, setReservationStep] = useState<'form' | 'processing' | 'confirmed_pix' | 'confirmed_card'>('form');
+  const [reservationData, setReservationData] = useState<any>(null);
+  const [paymentData, setPaymentData] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
+  const [spinnerText, setSpinnerText] = useState('Criando sua reserva...');
+
   const confirmationMessage = "Você precisa confirmar que está ciente das condições da reserva.";
+
+  function formatCpf(value: string) {
+    const digits = value.replace(/\D/g, "").slice(0, 11);
+    return digits
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+
+  function isCpfValid(value: string) {
+    const digits = value.replace(/\D/g, "");
+    if (digits.length !== 11) return false;
+    if (/^(\d)\1{10}$/.test(digits)) return false;
+
+    const calcCheckDigit = (cpf: string, factor: number) => {
+      let total = 0;
+      for (let i = 0; i < factor - 1; i++) {
+        total += Number(cpf[i]) * (factor - i);
+      }
+      const result = (total * 10) % 11;
+      return result === 10 ? 0 : result;
+    };
+
+    const firstDigit = calcCheckDigit(digits, 10);
+    const secondDigit = calcCheckDigit(digits, 11);
+    return firstDigit === Number(digits[9]) && secondDigit === Number(digits[10]);
+  }
 
   const requiredFieldsFilled = Boolean(
     responsavel.trim() &&
     whatsapp.trim() &&
     email.trim() &&
+    cpf.trim() &&
+    isCpfValid(cpf) &&
     selectedEventId &&
     notes.trim() &&
-    confirmReserva &&
     children.length > 0 &&
     children.every((child) => child.name.trim() && child.age.trim())
   );
@@ -817,6 +854,7 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
     }
     const validChildren = children.filter((c) => c.name.trim());
     setSubmitting(true);
+    setReservationStep('processing');
     try {
       if (!selectedEvent) {
         toast.error("Selecione um evento antes de concluir a reserva.");
@@ -833,6 +871,7 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
         .from("reservations")
         .insert({
           responsible_name: responsavel.trim().slice(0, 120),
+          responsible_cpf: cpf.replace(/\D/g, "").slice(0, 11) || null,
           whatsapp: whatsapp.trim().slice(0, 30),
           email: email.trim().slice(0, 120) || null,
           children: validChildren.map((c) => ({ name: c.name.trim().slice(0, 80), age: c.age.trim().slice(0, 20) })),
@@ -866,17 +905,28 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
         }
       }
 
-      setDone({ id: data!.id, total });
+      // reservation created
+      const reservation = {
+        id: data!.id,
+        responsible_name: responsavel.trim(),
+        workshop_name: selectedEvent.name,
+        children: validChildren,
+        amount: total,
+        whatsapp: whatsapp.trim(),
+      };
+      setReservationData(reservation);
       toast.success("Reserva registrada!");
 
-      // Initiate payment creation on the server and capture link/QR
+      // Initiate payment creation on server
       try {
         const res = await processPaymentFn({ data: { reservationId: data!.id, paymentMethod } });
-        if (res?.paymentLink || res?.pixQrCode) {
-          setPaymentInfo(res);
-        }
+        setPaymentData(res);
+        if (paymentMethod === 'pix') setReservationStep('confirmed_pix');
+        else setReservationStep('confirmed_card');
       } catch (e) {
         console.warn('processPayment error', e);
+        toast.error('Erro ao processar pagamento. Tente novamente.');
+        setReservationStep('form');
       }
     } catch (err: any) {
       toast.error(err.message ?? "Erro ao enviar reserva");
@@ -884,28 +934,93 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
       setSubmitting(false);
     }
   }
+  // Spinner text rotation while processing
+  useEffect(() => {
+    if (reservationStep !== 'processing') return;
+    const msgs = ['Criando sua reserva...', 'Processando pagamento...', 'Quase lá...'];
+    let i = 0;
+    setSpinnerText(msgs[0]);
+    const t = setInterval(() => {
+      i = (i + 1) % msgs.length;
+      setSpinnerText(msgs[i]);
+    }, 2000);
+    return () => clearInterval(t);
+  }, [reservationStep]);
 
-  if (done) {
+  const copyPix = async () => {
+    if (!paymentData?.pixCopyPaste) return;
+    try {
+      await navigator.clipboard.writeText(paymentData.pixCopyPaste);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
+
+  if (reservationStep === 'processing') {
     return (
-      <div className="form-box" style={{ textAlign: "center" }}>
-        <div className="form-title">Reserva recebida</div>
-        <p style={{ color: "var(--texto-suave)", margin: "12px 0 20px", lineHeight: 1.6 }}>
-          Sua reserva foi registrada. {done.total > 0 ? <>O valor é <strong>R$ {done.total.toFixed(2).replace(".", ",")}</strong>.</> : null}
-          <br />Em breve entraremos em contato com as instruções de pagamento (PIX) para confirmar a vaga.
-        </p>
-        {paymentInfo?.paymentLink && (
-          <div style={{ marginTop: 12 }}>
-            <a href={paymentInfo.paymentLink} target="_blank" rel="noopener" className="btn-primary">Pagar agora</a>
+      <div className="form-box" style={{ textAlign: 'center' }}>
+        <div style={{ display: 'grid', gap: 12, placeItems: 'center', padding: 24 }}>
+          <div style={{ width: 80, height: 80, borderRadius: 40, background: '#E6F8EF', display: 'grid', placeItems: 'center' }}>
+            <svg className="animate-spin" style={{ width: 36, height: 36 }} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth="3" stroke="#D96B50" strokeDasharray="31.4 31.4" fill="none"/></svg>
+          </div>
+          <div style={{ fontWeight: 800, fontFamily: 'var(--font-display)', fontSize: 18 }}>Aguarde</div>
+          <div style={{ color: 'var(--texto-suave)' }}>{spinnerText}</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (reservationStep === 'confirmed_pix' || reservationStep === 'confirmed_card') {
+    const isPix = reservationStep === 'confirmed_pix';
+    const pixImg = paymentData?.pixQrCode;
+    const pixCode = paymentData?.pixCopyPaste;
+    const invoiceUrl = paymentData?.paymentLink;
+
+    return (
+      <div className="form-box" style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: 20, fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--coral)' }}>✅ Reserva recebida!</div>
+        <div style={{ color: 'var(--texto-suave)', marginTop: 6 }}>Falta só um passo para garantir sua vaga</div>
+
+        <div style={{ marginTop: 16, background: '#f5ede4', padding: 16, borderRadius: 18 }}>
+          <div style={{ fontWeight: 700 }}>{reservationData?.workshop_name}</div>
+          <div style={{ marginTop: 6, color: 'var(--texto)' }}>Responsável: {reservationData?.responsible_name}</div>
+          <div style={{ marginTop: 6 }}>Criança(s): {(reservationData?.children || []).map((c: any) => c.name).join(', ')}</div>
+          <div style={{ marginTop: 6 }}>Valor: R$ {(reservationData?.amount ?? 0).toFixed(2).replace('.', ',')}</div>
+          <div style={{ marginTop: 6 }}>WhatsApp: {reservationData?.whatsapp}</div>
+        </div>
+
+        {isPix ? (
+          <div style={{ marginTop: 18 }}>
+            <div style={{ fontWeight: 800, marginBottom: 8 }}>Pague via Pix para confirmar sua vaga</div>
+            {pixImg ? (
+              <img src={`data:image/png;base64,${pixImg}`} alt="QR Pix" style={{ maxWidth: 260, margin: '12px auto', display: 'block' }} />
+            ) : (
+              <div style={{ color: 'var(--texto-suave)', margin: 12 }}>QR code indisponível no momento.</div>
+            )}
+            {pixCode && (
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'center', marginTop: 8 }}>
+                <input readOnly value={pixCode} style={{ width: '100%', maxWidth: 420, padding: 10, borderRadius: 8, border: '1px solid #ddd' }} />
+                <button type="button" onClick={copyPix} className="btn-primary" style={{ minWidth: 110 }}>{copied ? 'Copiado! ✓' : 'Copiar'}</button>
+              </div>
+            )}
+            <div style={{ marginTop: 12 }}>
+              <a href={invoiceUrl} target="_blank" rel="noopener" className="btn-outline">Ver fatura completa →</a>
+            </div>
+            <div style={{ marginTop: 8, color: 'var(--texto-suave)' }}>⚡ Aprovação instantânea após o pagamento</div>
+          </div>
+        ) : (
+          <div style={{ marginTop: 18 }}>
+            <div style={{ fontWeight: 800, marginBottom: 8 }}>Finalize com cartão de crédito</div>
+            <div style={{ marginTop: 12 }}>
+              <a href={paymentData?.paymentLink} target="_blank" rel="noopener" className="btn-primary">💳 Pagar agora →</a>
+            </div>
+            <div style={{ marginTop: 8, color: 'var(--texto-suave)' }}>Você será direcionado para a página segura do Asaas.</div>
+            <div style={{ marginTop: 6, color: 'var(--texto-suave)' }}>Sua vaga será confirmada após aprovação do pagamento.</div>
           </div>
         )}
-        {paymentInfo?.pixQrCode && (
-          <div style={{ marginTop: 12 }}>
-            <div style={{ marginBottom: 8 }}>QR Code Pix:</div>
-            <img src={paymentInfo.pixQrCode} alt="QR Code Pix" style={{ maxWidth: 220, display: 'block', margin: '0 auto' }} />
-          </div>
-        )}
-        <div style={{ background: "var(--creme2)", borderRadius: 12, padding: 16, fontSize: 13, color: "var(--texto-suave)" }}>
-          Código da reserva: <strong style={{ color: "var(--texto)" }}>{done.id.slice(0, 8).toUpperCase()}</strong>
+
+        <div style={{ marginTop: 18 }}>
+          <div style={{ color: 'var(--texto-suave)' }}>Dúvidas? <a href={waLink()} target="_blank" rel="noopener">Fale com a gente no WhatsApp</a></div>
         </div>
       </div>
     );
@@ -925,6 +1040,15 @@ function ReservationForm({ events, selectedEventId, onSelectEventId }: { events:
         <div className="form-group">
           <label>WhatsApp *</label>
           <input maxLength={30} value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="(48) 9..." />
+        </div>
+        <div className="form-group">
+          <label>CPF do responsável *</label>
+          <input
+            maxLength={14}
+            value={cpf}
+            onChange={(e) => setCpf(formatCpf(e.target.value))}
+            placeholder="000.000.000-00"
+          />
         </div>
         <div className="form-group">
           <label>E-mail *</label>
